@@ -5,7 +5,9 @@
   "scripts": {
     "build": "tsc",
     "start": "rimraf ./dist && tsc && node ./dist/server.js",
-    "dev": "TS_NODE=true NODE_OPTIONS=\"-r ts-node/register\" node ./src/server.ts | pino-pretty -o '{component} - {msg}' -i component"
+    "start:pretty": "rimraf ./dist && tsc && node ./dist/server.js | pino-pretty -o '{component} - {msg}' -i component",
+    "dev": "TS_NODE=true NODE_OPTIONS=\"-r ts-node/register\" node ./src/server.ts | pino-pretty -o '{component} - {msg}' -i component",
+    "lint": "eslint -c .eslintrc.js \"{src, test}/**/*.{js,ts}\" --quiet"
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,8 @@
     "@types/node-fetch": "^2.6.1",
     "@types/passport": "^1.0.7",
     "@types/passport-http": "^0.3.9",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "eslint": "^8.13.0",
     "nodemon": "^2.0.15",
     "rimraf": "^3.0.2",
     "ts-node": "^10.7.0",
