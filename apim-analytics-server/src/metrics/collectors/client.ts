@@ -18,10 +18,15 @@ type CollectorMetadata = {
   environments?: Environment[];
 }
 
+/** The events emitted by the collector. */
+interface Events {
+  update: (clients: Client[]) => void;
+}
+
 /**
  * A collector for client metrics.
  */
-export class ClientMetricsCollector extends AbstractCollector<{}> {
+export class ClientMetricsCollector extends AbstractCollector<Events> {
 
   /** The metadata. */
   #metadata: CollectorMetadata = {};
@@ -226,12 +231,12 @@ export class ClientMetricsCollector extends AbstractCollector<{}> {
       clients.forEach(client => {
         const uptime = client.data.uptime ?? 0;
         if (uptime < 60) {
-          for (let reason in reasonToDataPropertyMap) {
+          for (const reason in reasonToDataPropertyMap) {
             this.inc(createLabelValues(client, 'incoming', reason), 0);
           }
           this.inc(createLabelValues(client, 'outgoing'), 0);
         } else {
-          for (let reason in reasonToDataPropertyMap) {
+          for (const reason in reasonToDataPropertyMap) {
             const value = client.data[reasonToDataPropertyMap[reason]] || 0;
             this.inc(createLabelValues(client, 'incoming', reason), value);
           }
@@ -353,6 +358,8 @@ export class ClientMetricsCollector extends AbstractCollector<{}> {
         } else {
           L.debug(`${this.typeName}.messageHandler`, 'Updated clients');
         }
+
+        this.emit('update', this.#clients);
       }
     });
   }

@@ -43,10 +43,10 @@ const getRestDeliveryPoints = async (server: Server, environment: Environment, a
   let nextPageUri = `${endpoint.uri}/msgVpns/${vpnName}/clients?count=100&select=${clientProperties.join(',')}`;
   while (nextPageUri) {
 
-    let json = await fetchData(nextPageUri, headers);
-    nextPageUri = json?.meta?.paging?.nextPageUri;
+    const response = await fetchData(nextPageUri, headers);
+    nextPageUri = response?.meta?.paging?.nextPageUri;
 
-    for (const client of json.data) {
+    for (const client of response.data) {
 
       const application = applications.find(application => {
         return (client.clientUsername === `#rdp/${application.internalName}`);

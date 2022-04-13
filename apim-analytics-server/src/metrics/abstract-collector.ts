@@ -6,10 +6,15 @@ import { Logger as L } from '../common/logger';
 /** A message handler for worker messages. */
 type MessageHandlerFn = (message: any, workerMetadata: any) => void;
 
+/** Default events. */
+interface Events {
+  update: () => void;
+}
+
 /**
  * Base class for a metrics collector.
  */
-export abstract class AbstractCollector<L extends ListenerSignature<L> = {}> extends TypedEmitter<L> {
+export abstract class AbstractCollector<L extends ListenerSignature<L> = Events> extends TypedEmitter<L> {
 
   /** The type name of the collector. */
   #typeName: string;
@@ -38,8 +43,6 @@ export abstract class AbstractCollector<L extends ListenerSignature<L> = {}> ext
 
     super();
 
-    const collector = this;
-
     this.#typeName = typeName;
     this.#registry = new prometheus.Registry();
 
@@ -64,19 +67,19 @@ export abstract class AbstractCollector<L extends ListenerSignature<L> = {}> ext
       outputWorkerMetadata: false,
       workerMessageHandler: (message: any, workerMetadata: any): void => {
         if (message.message === 'done') {
-          const duration = new Date().getTime() - collector.#workerStartTime[message.name];
+          const duration = new Date().getTime() - this.#workerStartTime[message.name];
           L.info(`${typeName}.scheduler`, `Worker for job '${message.name}' signaled completion [${duration}ms]`);
         }
-        collector.#workerMessageHandlers.forEach(handler => handler(message, workerMetadata));
+        this.#workerMessageHandlers.forEach(handler => handler(message, workerMetadata));
       },
       silenceRootCheckError: true,
     });
 
     this.#scheduler.on('worker created', (name: string) => {
-      collector.#workerStartTime[name] = new Date().getTime();
+      this.#workerStartTime[name] = new Date().getTime();
     });
     this.#scheduler.on('worker deleted', (name: string) => {
-      delete collector.#workerStartTime[name];
+      delete this.#workerStartTime[name];
     });
   }
 

@@ -18,10 +18,15 @@ type CollectorMetadata = {
   environments?: Environment[];
 }
 
+/** The events emitted by the collector. */
+interface Events {
+  update: (queues: Queue[]) => void;
+}
+
 /**
  * A collector for queue metrics.
  */
-export class QueueMetricsCollector extends AbstractCollector<{}> {
+export class QueueMetricsCollector extends AbstractCollector<Events> {
 
   /** The metadata. */
   #metadata: CollectorMetadata = {};
@@ -361,7 +366,7 @@ export class QueueMetricsCollector extends AbstractCollector<{}> {
 
         this.#queues.length = 0;
         this.#queues.push(...message.message);
-        
+
         if (L.isLevelEnabled('trace')) {
           L.trace(`${this.typeName}.messageHandler`, 'Updated queues', {
             queues: this.#queues.map(item => ({ name: item.queueName, meta: item.meta }))
@@ -369,6 +374,8 @@ export class QueueMetricsCollector extends AbstractCollector<{}> {
         } else {
           L.debug(`${this.typeName}.messageHandler`, 'Updated queues');
         }
+
+        this.emit('update', this.#queues);
       }
     });
   }

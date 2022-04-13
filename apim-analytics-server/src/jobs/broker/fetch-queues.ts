@@ -65,10 +65,10 @@ const getQueues = async (server: Server, environment: Environment, applications:
   let nextPageUri = `${endpoint.uri}/msgVpns/${vpnName}/queues?count=100&where=owner!=""&select=${queueProperties.join(',')}`;
   while (nextPageUri) {
 
-    let json = await fetchData(nextPageUri, headers);
-    nextPageUri = json?.meta?.paging?.nextPageUri;
+    const response = await fetchData(nextPageUri, headers);
+    nextPageUri = response?.meta?.paging?.nextPageUri;
 
-    json.data.forEach((queue: any, index: number) => {
+    response.data.forEach((queue: any, index: number) => {
 
       const application = applications.find(application => {
         // the name of a queue for guaranteed messaging starts with the internal
@@ -97,7 +97,7 @@ const getQueues = async (server: Server, environment: Environment, applications:
             maxTtlExpiredDiscardedMsgCount: queue.maxTtlExpiredDiscardedMsgCount,
             maxTtlExpiredToDmqFailedMsgCount: queue.maxTtlExpiredToDmqFailedMsgCount,
             maxTtlExpiredToDmqMsgCount: queue.maxTtlExpiredToDmqMsgCount,
-            msgCount: json.collections[index]?.msgs.count,
+            msgCount: response.collections[index]?.msgs.count,
             msgSpoolUsage: queue.msgSpoolUsage,
             msgSpoolPeakUsage: queue.msgSpoolPeakUsage,
             noLocalDeliveryDiscardedMsgCount: queue.noLocalDeliveryDiscardedMsgCount,

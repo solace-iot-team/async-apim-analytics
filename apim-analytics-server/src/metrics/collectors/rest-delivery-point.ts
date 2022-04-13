@@ -18,10 +18,15 @@ type CollectorMetadata = {
   environments?: Environment[];
 }
 
+/** The events emitted by the collector. */
+interface Events {
+  update: (restDeliveryPoints: RestDeliveryPoint[]) => void;
+}
+
 /**
  * A collector for client metrics.
  */
-export class RestDeliveryPointMetricsCollector extends AbstractCollector<{}> {
+export class RestDeliveryPointMetricsCollector extends AbstractCollector<Events> {
 
   /** The metadata. */
   #metadata: CollectorMetadata = {};
@@ -378,6 +383,8 @@ export class RestDeliveryPointMetricsCollector extends AbstractCollector<{}> {
         } else {
           L.debug(`${this.typeName}.messageHandler`, 'Updated rest delivery points');
         }
+
+        this.emit('update', this.#restDeliveryPoints);
       }
     });
   }

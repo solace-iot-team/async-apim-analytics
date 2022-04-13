@@ -54,10 +54,10 @@ const getClients = async (server: Server, environment: Environment, applications
   let nextPageUri = `${endpoint.uri}/msgVpns/${vpnName}/clients?count=100&select=${clientProperties.join(',')}`;
   while (nextPageUri) {
 
-    let json = await fetchData(nextPageUri, headers);
-    nextPageUri = json?.meta?.paging?.nextPageUri;
+    const response = await fetchData(nextPageUri, headers);
+    nextPageUri = response?.meta?.paging?.nextPageUri;
 
-    json.data.forEach((client: any) => {
+    response.data.forEach((client: any) => {
 
       const application = applications.find(application => {
         // an RDP client connects with a '#rdp/xxxx' user and is ignored
