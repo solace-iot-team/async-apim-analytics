@@ -1,0 +1,64 @@
+{
+  "server": {
+    "baseUrl": "${env:AMAX_SERVER_CONNECTOR_URL}",
+    "admin": {
+      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+    }
+  },
+  "organization": {
+    "name": "organization2",
+    "token": "${env:AMAX_SERVER_SOLACE_CLOUD_TOKEN}",
+    "admin": {
+      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+    }
+  },
+  "environments": [
+    {
+      "name": "system-test",
+      "service": "APIM-GW-APCAX"
+    }
+  ],
+  "apis": [
+    {
+      "name": "say-hello",
+      "uri": "./apis/say-hello.yml"
+    }
+  ],
+  "apiProducts": [
+    {
+      "name": "say-hello",
+      "apis": [
+        "say-hello"
+      ],
+      "guaranteedMessaging": false
+    }
+  ],
+  "applications": [
+    {
+      "name": "team-a_application-a1",
+      "type": "team",
+      "owner": "team-a",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "credentials": {
+        "username": "organization2_application-a1",
+        "password": "Tuesday1904"
+      }
+    },
+    {
+      "name": "team-a_application-a2",
+      "type": "team",
+      "owner": "team-a",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "credentials": {
+        "username": "organization2_application-a2",
+        "password": "Tuesday1904"
+      }
+    }
+  ]
+}

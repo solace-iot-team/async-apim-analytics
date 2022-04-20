@@ -1,0 +1,163 @@
+{
+  "server": {
+    "baseUrl": "${env:AMAX_SERVER_CONNECTOR_URL}",
+    "admin": {
+      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+    }
+  },
+  "organization": {
+    "name": "organization1",
+    "token": "${env:AMAX_SERVER_SOLACE_CLOUD_TOKEN}",
+    "admin": {
+      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+    }
+  },
+  "environments": [
+    {
+      "name": "development",
+      "service": "APIM-GW-DEV"
+    },
+    {
+      "name": "production",
+      "service": "APIM-GW-PROD"
+    }
+  ],
+  "apis": [
+    {
+      "name": "say-hello",
+      "uri": "./apis/say-hello.yml"
+    },
+    {
+      "name": "administration",
+      "uri": "http://localhost:9090/notification-api/consumer/administration.yml"
+    },
+    {
+      "name": "environments",
+      "uri": "http://localhost:9090/notification-api/consumer/environments.yml"
+    },
+    {
+      "name": "apis",
+      "uri": "http://localhost:9090/notification-api/consumer/apis.yml"
+    },
+    {
+      "name": "apiProducts",
+      "uri": "http://localhost:9090/notification-api/consumer/apiProducts.yml"
+    },
+    {
+      "name": "apps",
+      "uri": "http://localhost:9090/notification-api/consumer/apps.yml"
+    }
+  ],
+  "apiProducts": [
+    {
+      "name": "say-hello",
+      "apis": [
+        "say-hello"
+      ],
+      "guaranteedMessaging": false
+    },
+    {
+      "name": "connector-notifications",
+      "apis": [
+        "administration",
+        "environments",
+        "apiProducts",
+        "apps"
+      ],
+      "environments": [
+        "development"
+      ],
+      "guaranteedMessaging": true
+    }
+  ],
+  "applications": [
+    {
+      "name": "team-a_application-a1",
+      "type": "team",
+      "owner": "team-a",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "credentials": {
+        "username": "organization1_application-a1",
+        "password": "Wednesday1404"
+      }
+    },
+    {
+      "name": "team-a_application-a2",
+      "type": "team",
+      "owner": "team-a",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "credentials": {
+        "username": "organization1_application-a2",
+        "password": "Wednesday1404"
+      }
+    },
+    {
+      "name": "team-b_application-b1",
+      "type": "team",
+      "owner": "team-b",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "credentials": {
+        "username": "organization1_application-b1",
+        "password": "Wednesday1404"
+      }
+    },
+    {
+      "name": "team-c_application-c1",
+      "type": "team",
+      "owner": "team-c",
+      "apiProducts": [
+        "connector-notifications"
+      ],
+      "credentials": {
+        "username": "organization1_application-c1",
+        "password": "Wednesday1404"
+      }
+    },
+    {
+      "name": "team-x_application-x1",
+      "type": "team",
+      "owner": "team-x",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "webHooks": [
+        {
+          "uri": "https://postman-echo.com/post",
+          "method": "POST",
+          "environments": ["development"]
+        }
+      ],
+      "credentials": {
+        "username": "organization1_application-x1",
+        "password": "Wednesday1404"
+      }
+    },
+    {
+      "name": "team-x_application-x2",
+      "type": "team",
+      "owner": "team-x",
+      "apiProducts": [
+        "say-hello"
+      ],
+      "webHooks": [
+        {
+          "uri": "https://postman-echo.com/put",
+          "method": "PUT",
+          "environments": ["development"]
+        }
+      ],
+      "credentials": {
+        "username": "organization1_application-x2",
+        "password": "Wednesday1404"
+      }
+    }
+  ]
+}

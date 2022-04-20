@@ -1,6 +1,14 @@
+import path from 'path';
+import * as fs from "fs";
 import pino from 'pino';
 
 const file = process.env.AMAX_SERVER_LOGGER_LOG_FILE;
+if (file) {
+  const directory = path.dirname(file);
+  if (!fs.existsSync(directory)) {
+    fs.mkdirSync(directory, { recursive: true });
+  }
+}
 
 /** A simple logger. */
 export class Logger {

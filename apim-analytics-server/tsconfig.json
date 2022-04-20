@@ -8,7 +8,6 @@
     "experimentalDecorators": false,
     /* Modules */
     "module": "commonjs",
-    "rootDir": "src",
     "moduleResolution": "node",
     "typeRoots": [
       "./node_modules/@types"
@@ -39,8 +38,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
-    "build.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "dist",
