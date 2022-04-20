@@ -17,16 +17,11 @@ export async function createResources(filename: string): Promise<void> {
   const workingDirectory = path.dirname(filename);
   process.chdir(workingDirectory);
 
-  try {
-    await connector.createOrganization(resourceSet);
-    await connector.createEnvironments(resourceSet);
-    await connector.createApis(resourceSet);
-    await connector.createApiProducts(resourceSet);
-    await connector.createApplications(resourceSet);
-  } catch (all) {
-    // ignore
-  }
-
+  await connector.createOrganization(resourceSet);
+  await connector.createEnvironments(resourceSet);
+  await connector.createApis(resourceSet);
+  await connector.createApiProducts(resourceSet);
+  await connector.createApplications(resourceSet);
 }
 
 /**
@@ -37,9 +32,5 @@ export async function createResources(filename: string): Promise<void> {
 export async function deleteResources(filename: string) {
 
   const resourceSet = utils.createResourceSetFromFile(filename);
-  try {
-    await connector.deleteOrganization(resourceSet);
-  } catch (all) {
-    // ignore
-  }
+  await connector.deleteOrganization(resourceSet);
 }

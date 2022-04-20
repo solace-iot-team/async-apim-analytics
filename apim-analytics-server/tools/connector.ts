@@ -37,11 +37,31 @@ const checkFilename = (filename: string | undefined): string => {
   return filename;
 }
 
-switch (command) {
-  case 'create':
-    connector.createResources(checkFilename(args[3]));
-    break;
-  case 'delete':
-    connector.deleteResources(checkFilename(args[3]));
-    break;
+const createResources = async (filename: string): Promise<void> => {
+  try {
+    await connector.createResources(filename);
+  } catch (all) {
+    process.exit(2);
+  }
 }
+
+const deleteResources = async (filename: string): Promise<void> => {
+  try {
+    await connector.deleteResources(filename);
+  } catch (all) {
+    process.exit(2);
+  }
+}
+
+(async () => {
+
+  switch (command) {
+    case 'create':
+      await createResources(checkFilename(args[3]));
+      break;
+    case 'delete':
+      await deleteResources(checkFilename(args[3]));
+      break;
+  }
+
+})();
