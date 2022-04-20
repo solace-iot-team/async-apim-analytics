@@ -51,7 +51,7 @@ sh connector/stop.sh
 
 **Remove Local API Management Connector**
 ```bash
-sh connector/clean.sh
+sh connector/cleanup.sh
 ```
 
 ### Check Code
