@@ -14,8 +14,7 @@ dockerComposeFile="$scriptDir/docker-compose.yml"
 
 echo ">>> Stop containers for API Management Connector ..."
 docker-compose -p $dockerProjectName -f "$dockerComposeFile" stop
-if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose stop failed"; exit 1; fi
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" ps -a
+if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose stop failed"; exit 1; fi
 echo ">>> Success"
 
 ###

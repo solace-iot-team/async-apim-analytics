@@ -12,10 +12,9 @@ dockerComposeFile="$scriptDir/docker-compose.yml"
 ############################################################################################################################
 # Run
 
-echo ">>> Build, create and start containers for API Management connector ..."
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" up -d
-if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose up failed"; exit 1; fi
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" ps -a
+echo ">>> Start containers for API Management Connector ..."
+docker-compose -p $dockerProjectName -f "$dockerComposeFile" start
+if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose start failed"; exit 1; fi
 echo ">>> Success"
 
 ###

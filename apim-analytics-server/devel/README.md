@@ -30,33 +30,25 @@ vi ../.env
 # update values as needed
 ```
 
-## Developement
+## Development
 
-### Use Local API Management Connector
+### API Management Connector
 
-**Create and Start Local API Management Connector**
 ```bash
-sh connector/start.sh
-```
-
-**Bootstrap Local API Management Connector**
-```bash
+# create and bootstrap local connector
 sh connector/bootstap.sh
-```
-
-**Stop Local API Management Connector**
-```bash
+# start local connector
+sh connector/start.sh
+# stop local connector
 sh connector/stop.sh
-```
-
-**Remove Local API Management Connector**
-```bash
+# cleanup and delete local connector
 sh connector/cleanup.sh
 ```
 
-### Check Code
+### Code Analysis
 
 ```bash
+# analyse and check code
 npm run lint
 ```
 
