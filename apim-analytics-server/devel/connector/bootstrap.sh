@@ -6,7 +6,10 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 ############################################################################################################################
 # Settings
 
-rootDir=${scriptDir}/../..
+envFile=$scriptDir/../../.env
+
+toolsDir=$scriptDir/../../tools
+resourcesDir=$scriptDir/resources
 
 dockerProjectName="amax-devel"
 dockerComposeFile="$scriptDir/docker-compose.yml"
@@ -15,7 +18,7 @@ dockerComposeFile="$scriptDir/docker-compose.yml"
 # Helper
 
 function getenv {
-  grep "${1}" ${rootDir}/.env | cut -f 2 -d '='
+  grep "${1}" "$envFile" | cut -f 2 -d '='
 }
 
 function isServerAvailable () {
@@ -42,10 +45,10 @@ echo ">>> Success"
 waitUntilServerIsAvailable "http://localhost:$(getenv AMAX_SERVER_CONNECTOR_PORT)"
 
 echo ">>> Create resources for API Management Connector ..."
-DOTENV_CONFIG_PATH=${rootDir}/.env ${rootDir}/tools/connector.ts create ${scriptDir}/resources/organization1.json
-if [[ $? != 0 ]]; then echo ">>> ERROR: tools/connector.ts create failed"; exit 1; fi
-DOTENV_CONFIG_PATH=${rootDir}/.env ${rootDir}/tools/connector.ts create ${scriptDir}/resources/organization2.json
-if [[ $? != 0 ]]; then echo ">>> ERROR: tools/connector.ts create failed"; exit 1; fi
+DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "${resourcesDir}/organization1.json"
+if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create failed"; exit 1; fi
+DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "${resourcesDir}/organization2.json"
+if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create failed"; exit 1; fi
 echo ">>> Success"
 
 ###
