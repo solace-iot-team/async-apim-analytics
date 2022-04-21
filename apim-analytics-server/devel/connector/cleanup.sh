@@ -18,13 +18,13 @@ function getenv {
   grep "${1}" ${rootDir}/.env | cut -f 2 -d '='
 }
 
-function isServerAvailable() {
-  curl $(getenv AMAX_SERVER_CONNECTOR_URL) -o /dev/null --silent
+function isServerAvailable () {
+  curl "${1}" -o /dev/null --silent
 }
 
-function waitUntilServerIsAvailable() {
+function waitUntilServerIsAvailable () {
   printf "Wait until server is available "
-  while ! isServerAvailable; do
+  while ! isServerAvailable "${1}"; do
     printf "."
     sleep 1
   done
@@ -39,7 +39,7 @@ docker-compose -p $dockerProjectName -f "$dockerComposeFile" start
 if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose start failed"; exit 1; fi
 echo ">>> Success"
 
-waitUntilServerIsAvailable
+waitUntilServerIsAvailable "http://localhost:$(getenv AMAX_SERVER_CONNECTOR_PORT)"
 
 echo ">>> Delete resources for API Management Connector ..."
 DOTENV_CONFIG_PATH=${rootDir}/.env ${rootDir}/tools/connector.ts delete ${scriptDir}/resources/organization1.json

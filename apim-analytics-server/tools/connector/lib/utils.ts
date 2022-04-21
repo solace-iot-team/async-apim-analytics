@@ -32,12 +32,15 @@ const configReviver = (value: any): any => {
 
   if (typeof value === "string") {
 
-    const match = value.match(/^\$\{([^:]+):([^}]+)\}$/);
+    const match = value.match(/\$\{([^:]+):([^}]+)\}/);
     if (match) {
       const type: string = match[1].toLowerCase();
       const name: string = match[2].trim();
       if (type === "env" && process.env.hasOwnProperty(name)) {
-        value = process.env[name];
+        const envValue = process.env[name];
+        if (envValue) {
+          value = value.replace(match[0], envValue);
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 {
   "server": {
-    "baseUrl": "${env:AMAX_SERVER_CONNECTOR_URL}",
+    "baseUrl": "http:/localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/v1",
     "admin": {
       "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
       "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
@@ -31,23 +31,23 @@
     },
     {
       "name": "administration",
-      "uri": "http://localhost:9090/notification-api/consumer/administration.yml"
+      "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/administration.yml"
     },
     {
       "name": "environments",
-      "uri": "http://localhost:9090/notification-api/consumer/environments.yml"
+      "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/environments.yml"
     },
     {
       "name": "apis",
-      "uri": "http://localhost:9090/notification-api/consumer/apis.yml"
+      "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/apis.yml"
     },
     {
       "name": "apiProducts",
-      "uri": "http://localhost:9090/notification-api/consumer/apiProducts.yml"
+      "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/apiProducts.yml"
     },
     {
       "name": "apps",
-      "uri": "http://localhost:9090/notification-api/consumer/apps.yml"
+      "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/apps.yml"
     }
   ],
   "apiProducts": [

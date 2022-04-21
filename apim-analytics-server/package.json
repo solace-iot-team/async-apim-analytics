@@ -4,9 +4,9 @@
   "description": "Async API Management Analytics Server",
   "scripts": {
     "build": "tsc",
-    "start": "rimraf ./dist && tsc && node ./dist/server.js | pino-pretty -o '{component} - {msg}' -i component",
+    "start": "rimraf ./dist && tsc && node ./dist/src/server.js | pino-pretty -o '{component} - {msg}' -i component",
     "dev": "TS_NODE=true NODE_OPTIONS=\"-r ts-node/register\" node ./src/server.ts | pino-pretty -o '{component} - {msg}' -i component",
-    "lint": "eslint -c .eslintrc.js \"{src, test}/**/*.{js,ts}\" --quiet",
+    "lint": "eslint -c .eslintrc.js \"{src, test, tools}/**/*.{js,ts}\" --quiet",
     "test:integration": "DOTENV_CONFIG_PATH=test/.env mocha --config test/integration/.mocharc.yml test/integration/integration.spec.ts"
   },
   "repository": {

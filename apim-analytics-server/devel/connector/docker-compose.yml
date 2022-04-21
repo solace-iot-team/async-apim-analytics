@@ -9,7 +9,7 @@ services:
       - apim-connector-mongodb
     image: solaceiotteam/apim-connector-server:latest
     ports:
-      - ${AMAX_SERVER_CONNECTOR_PORT:-9090}:3000
+      - ${AMAX_SERVER_CONNECTOR_PORT:-8080}:3000
     volumes:
       - ./docker-volumes/apim-connector:/data
     restart: unless-stopped
