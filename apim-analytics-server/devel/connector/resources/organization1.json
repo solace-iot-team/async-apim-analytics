@@ -1,6 +1,6 @@
 {
   "server": {
-    "baseUrl": "http:/localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/v1",
+    "baseUrl": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/v1",
     "admin": {
       "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
       "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
