@@ -41,22 +41,26 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r $DOCS_DIRECTORY/devel/docs.requirements.txt
-
-      - name: "Build documentation"
-        run: |
-          $DOCS_DIRECTORY/make.sh
-
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Publish docker images to Docker Hub
+      - name: Build docker images
+        run: |
+          $RELEASE_DIRECTORY/build.sh
+
+      - name: Publish docker images
         run: |
           $RELEASE_DIRECTORY/release.sh
 
-      - name: "Publish documentation to gh-pages"
+      - name: "Build documentation"
+        run: |
+          ./make.sh
+        working-directory: ${{ env.DOCS_DIRECTORY }}
+
+      - name: "Publish documentation"
         run: |
           git fetch origin gh-pages
           git worktree add gh-pages gh-pages
@@ -69,6 +73,5 @@ jobs:
           git commit --allow-empty -F ../generated.txt
           # git push -f -u origin gh-pages
           git push -u origin gh-pages
-
 ###
 # End

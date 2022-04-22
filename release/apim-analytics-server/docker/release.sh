@@ -30,7 +30,7 @@ if [[ $? != 0 ]]; then echo "ERROR: image not found, must be built first"; exit 
 echo ">>> Done"
 
 echo ">>> Check if docker image for API Management Analytics Server has already been published ..."
-docker manifest inspect $dockerHubUser/$dockerImageName:$dockerImageTag
+docker manifest inspect $dockerHubUser/$dockerImageName:$dockerImageTag 2> /dev/null
 if [[ $? == 0 ]]; then echo "[$SKIPPING]: image has already been published"; exit 2; fi
 echo ">>> Done"
 
