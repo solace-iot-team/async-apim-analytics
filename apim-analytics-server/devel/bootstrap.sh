@@ -6,10 +6,11 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 ############################################################################################################################
 # Settings
 
-envFile=$scriptDir/../../.env
+envFile="$scriptDir/.env"
+export DOTENV_CONFIG_PATH="$envFile"
 
-toolsDir=$scriptDir/../../tools
-resourcesDir=$scriptDir/resources
+toolsDir="$scriptDir/../tools"
+resourcesDir="$scriptDir/resources"
 
 dockerProjectName="amax-devel"
 dockerComposeFile="$scriptDir/docker-compose.yml"
@@ -45,9 +46,9 @@ echo ">>> Success"
 waitUntilServerIsAvailable "http://localhost:$(getenv AMAX_SERVER_CONNECTOR_PORT)"
 
 echo ">>> Create resources for API Management Connector ..."
-DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "${resourcesDir}/organization1.json"
+"$toolsDir/connector.ts" create "${resourcesDir}/organization1.json"
 if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create failed"; exit 1; fi
-DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "${resourcesDir}/organization2.json"
+"$toolsDir/connector.ts" create "${resourcesDir}/organization2.json"
 if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create failed"; exit 1; fi
 echo ">>> Success"
 

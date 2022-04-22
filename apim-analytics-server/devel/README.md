@@ -25,8 +25,8 @@ npm install
 ### Set Environment Variables
 
 ```bash
-cp template.env ../.env
-vi ../.env
+cp template.env .env
+vi .env
 # update values as needed
 ```
 
@@ -34,16 +34,18 @@ vi ../.env
 
 ### API Management Connector
 
-```bash
-# create and bootstrap local connector
-sh connector/bootstap.sh
-# start local connector
-sh connector/start.sh
-# stop local connector
-sh connector/stop.sh
-# cleanup and delete local connector
-sh connector/cleanup.sh
-```
+The API Management Analytics Server requires an API Management Connector. The following scripts can be used to setup, run and
+teardown an API Management Connector on your local machine. [^1]
+
+| Script       | Description |
+|--------------|-------------|
+| bootstrap.sh | Create, start and bootstrap the latest release of the API Management Connector |
+| start.sh     | Start the API Management Connector |
+| stop.sh      | Stop the API Management Connector |
+| cleanup.sh   | Remove the API Management Connector |
+
+[^1]: The API Management Connector is created as multi-container Docker application and requires Docker Engine and Docker Compose,
+      which are both included in Docker Desktop for Mac.
 
 ### Code Analysis
 
@@ -52,10 +54,13 @@ sh connector/cleanup.sh
 npm run lint
 ```
 
-### Run Analytics Server in Development Mode
+### Run server for API Management Analytics
 
 ```bash
-npm run dev
+# start server
+npm start
+# start server with automatic restart when a source file changes
+npm run start:watch
 ```
 
 ### Produce and Consume Events

@@ -6,10 +6,11 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 ############################################################################################################################
 # Settings
 
-envFile=$scriptDir/../../.env
+envFile="$scriptDir/.env"
+export DOTENV_CONFIG_PATH="$envFile"
 
-toolsDir=$scriptDir/../../tools
-resourcesDir=$scriptDir/resources
+toolsDir="$scriptDir/../tools"
+resourcesDir="$scriptDir/resources"
 
 dockerProjectName="amax-devel"
 dockerComposeFile="$scriptDir/docker-compose.yml"
@@ -37,7 +38,7 @@ function waitUntilServerIsAvailable () {
 ############################################################################################################################
 # Run
 
-echo ">>> Start containers for API Management connector ..."
+echo ">>> Start containers for API Management Connector ..."
 docker-compose -p $dockerProjectName -f "$dockerComposeFile" start
 if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose start failed"; exit 1; fi
 echo ">>> Success"
@@ -45,9 +46,9 @@ echo ">>> Success"
 waitUntilServerIsAvailable "http://localhost:$(getenv AMAX_SERVER_CONNECTOR_PORT)"
 
 echo ">>> Delete resources for API Management Connector ..."
-DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" delete "$resourcesDir/organization1.json"
+"$toolsDir/connector.ts" delete "$resourcesDir/organization1.json"
 if [[ $? != 0 ]]; then echo ">>> ERROR: tools/connector.ts delete failed"; exit 1; fi
-DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" delete "$resourcesDir/organization2.json"
+"$toolsDir/connector.ts" delete "$resourcesDir/organization2.json"
 if [[ $? != 0 ]]; then echo ">>> ERROR: tools/connector.ts delete failed"; exit 1; fi
 echo ">>> Success"
 
