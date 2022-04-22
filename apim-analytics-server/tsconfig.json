@@ -38,8 +38,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
-    "tools/**/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": [
     "dist",
