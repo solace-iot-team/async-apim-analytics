@@ -15,8 +15,11 @@ FROM node:lts-alpine@sha256:a9b9cb880fa429b0bea899cd3b1bc081ab7277cc97e6d2dcd84b
 RUN apk add dumb-init
 
 ENV NODE_ENV production
-USER node
+
 WORKDIR /usr/local/apim-analytics-server
+RUN chown -R node:node /usr/local/apim-analytics-server
+
+USER node
 
 COPY --chown=node:node --from=build /usr/local/apim-analytics-server/dist ./
 COPY --chown=node:node package*.json ./
