@@ -5,8 +5,9 @@
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "build:production": "rimraf ./dist && tsc --declaration false --sourceMap false",
-    "start": "node ./dist/server.js | pino-pretty -o '{component} - {msg}' -i component",
-    "dev": "TS_NODE=true NODE_OPTIONS=\"-r ts-node/register\" node ./src/server.ts | pino-pretty -o '{component} - {msg}' -i component",
+    "start": "DOTENV_CONFIG_PATH=devel/.env TS_NODE=true node -r ts-node/register ./src/server.ts",
+    "start:watch": "nodemon",
+    "debug": "DOTENV_CONFIG_PATH=devel/.env TS_NODE=true node --inspect-brk -r ts-node/register ./src/server.ts",
     "lint": "eslint -c .eslintrc.js \"{src, test, tools}/**/*.{js,ts}\" --quiet",
     "test:integration": "DOTENV_CONFIG_PATH=test/.env mocha --config test/integration/.mocharc.yml test/integration/integration.spec.ts"
   },
