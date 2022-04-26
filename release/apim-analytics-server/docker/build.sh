@@ -11,6 +11,7 @@ dockerContext=$scriptDir/context
 
 buildFiles=(
   "$amaxServerDir/src"
+  "$amaxServerDir/build.ts"
   "$amaxServerDir/package*.json"
   "$amaxServerDir/tsconfig.json"
 )
