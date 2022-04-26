@@ -1,0 +1,69 @@
+# ---------------------------------------------------------------------------------------------
+# MIT License
+# Copyright (c) 2022, Solace Corporation, Nils Eckert (nils.eckert@solace.com)
+# ---------------------------------------------------------------------------------------------
+
+name: integration-test
+on:
+  # for testing
+  workflow_dispatch:
+  # production
+  schedule:
+    - cron: '0 7 * * *'
+  pull_request:
+    branches:
+      - main
+
+env:
+  ANALYTICS_SERVER_HOME: "async-apim-analytics/apim-analytics-server"
+
+jobs:
+
+  run-tests:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        node-version: [ '14.x', '16.x' ]
+    env:
+      TEST_DIRECTORY: "test"
+    defaults:
+      run:
+        working-directory: ${{ env.ANALYTICS_SERVER_HOME }}
+
+    steps:
+
+      - name: Cancel job if user has insufficient permissions
+        if: github.event_name == 'workflow_dispatch' && github.actor != 'NilsEckertSolace' && github.actor != 'ricardojosegomezulmke' && github.actor != '195858'
+        uses: andymckay/cancel-action@0.2
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          path: async-apim-analytics
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build server
+        run: |
+          npm ci
+          npm run build
+
+      - name: Execute tests
+        run: |
+          export AMAX_SERVER_SOLACE_CLOUD_URL=${{ secrets.SOLACE_CLOUD_URL }}
+          export AMAX_SERVER_SOLACE_CLOUD_TOKEN=${{ secrets.SOLACE_CLOUD_TOKEN }}
+          $TEST_DIRECTORY/integration/run.sh
+
+      - name: Archive logs
+        if: ${{ (failure() && !cancelled()) || (always() && github.event_name == 'workflow_dispatch') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: integration-test-logs
+          path: ${{ github.workspace }}/${{ env.ANALYTICS_SERVER_HOME }}/tmp
+          if-no-files-found: error
+
+###
+# The end
