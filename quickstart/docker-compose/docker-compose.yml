@@ -1,0 +1,82 @@
+services:
+  apim-connector-mongodb:
+    image: mongo:latest
+    volumes:
+      - apim-connector-mongodb-data:/data/db
+    restart: unless-stopped
+    profiles:
+      - all-in-one
+  apim-connector:
+    image: solaceiotteam/apim-connector-server:latest
+    ports:
+      - ${AMAX_CONNECTOR_PORT:-8081}:3000
+    healthcheck:
+      test: curl --fail -s http://localhost:3000/ || exit 1
+      interval: 15s
+    volumes:
+      - ./docker-volumes/apim-connector:/data
+    restart: unless-stopped
+    environment:
+      - DB_URL=mongodb://apim-connector-mongodb:27017/platform?retryWrites=true&w=majority
+      - LOG_LEVEL=debug
+      - APP_ID=apim-connector-server
+      - FILE_USER_REGISTRY=/data/user-registry.json
+      - PLATFORM_PORT=3000
+      - AUTH_EXTRACTION_USER_PRINCIPAL="$$.preferred_username"
+      - AUTH_EXTRACTION_ORGS="$$.organization"
+      - AUTH_EXTRACTION_ROLES="$$.groups"
+      - AUTH_VERIFICATION_KEY=/data/key-manager.pem
+      - AUTH_VERIFICATION_ISSUER="http://localhost:8180/auth/realms/default"
+      - AUTH_VERIFICATION_AUD="platform-api-server"
+      - AUTH_DISCOVERY_OIDC_URL=http://localhost:8180/auth/realms/default/.well-known/openid-configuration
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - apim-connector-mongodb
+    profiles:
+      - all-in-one
+  apim-analytics-server:
+    image: apim-analytics-server:latest
+    ports:
+      - ${AMAX_SERVER_PORT:-8080}:3000
+    healthcheck:
+      test: curl --fail -s http://localhost:3000/health || exit 1
+      interval: 15s
+    restart: unless-stopped
+    environment:
+      - AMAX_SERVER_PORT=3000
+      - AMAX_SERVER_USERNAME=${AMAX_SERVER_USERNAME}
+      - AMAX_SERVER_PASSWORD=${AMAX_SERVER_PASSWORD}
+      - AMAX_SERVER_LOGGER_LOG_LEVEL=${AMAX_SERVER_LOGGER_LOG_LEVEL:-debug}
+      - AMAX_SERVER_CONNECTOR_HOST=${AMAX_CONNECTOR_HOST:-host.docker.internal}
+      - AMAX_SERVER_CONNECTOR_PORT=${AMAX_CONNECTOR_PORT:-8080}
+      - AMAX_SERVER_CONNECTOR_USERNAME=${AMAX_CONNECTOR_USERNAME}
+      - AMAX_SERVER_CONNECTOR_PASSWORD=${AMAX_CONNECTOR_PASSWORD}
+      - AMAX_SERVER_SOLACE_CLOUD_URL=${AMAX_SOLACE_CLOUD_URL}
+      - AMAX_SERVER_SOLACE_CLOUD_TOKEN=${AMAX_SOLACE_CLOUD_TOKEN}
+      - AMAX_SERVER_ORGANIZATIONS=${AMAX_SERVER_ORGANIZATIONS}
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./docker-volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+    depends_on:
+      - apim-analytics-server
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports:
+      - ${AMAX_GRAFANA_PORT:-8084}:3000
+    volumes:
+      - ./docker-volumes/grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./docker-volumes/grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/apim-analytics.yml
+      - ./docker-volumes/grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/apim-analytics.yml
+      - ./docker-volumes/grafana/dashboards:/var/lib/grafana/dashboards
+    restart: unless-stopped
+volumes:
+  apim-connector-mongodb-data:

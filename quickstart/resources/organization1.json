@@ -1,23 +1,23 @@
 {
   "server": {
-    "baseUrl": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/v1",
+    "baseUrl": "http://localhost:${env:AMAX_CONNECTOR_PORT}/v1",
     "admin": {
-      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
-      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+      "username": "${env:AMAX_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_CONNECTOR_PASSWORD}"
     }
   },
   "organization": {
     "name": "organization1",
-    "token": "${env:AMAX_SERVER_SOLACE_CLOUD_TOKEN}",
+    "token": "${env:AMAX_SOLACE_CLOUD_TOKEN}",
     "admin": {
-      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
-      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+      "username": "${env:AMAX_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_CONNECTOR_PASSWORD}"
     }
   },
   "environments": [
     {
       "name": "development",
-      "service": "${env:AMAX_SERVER_SOLACE_SERVICE_ID}"
+      "service": "${env:AMAX_SOLACE_SERVICE_ID}"
     }
   ],
   "apis": [
@@ -37,15 +37,7 @@
   ],
   "applications": [
     {
-      "name": "team-a_application-a1",
-      "type": "team",
-      "owner": "team-a",
-      "apiProducts": [
-        "say-hello"
-      ]
-    },
-    {
-      "name": "team-a_application-a2",
+      "name": "team-a_application",
       "type": "team",
       "owner": "team-a",
       "apiProducts": [
