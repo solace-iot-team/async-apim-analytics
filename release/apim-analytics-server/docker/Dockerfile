@@ -12,7 +12,7 @@ RUN npm run build:production
 # The production image
 FROM node:lts-alpine@sha256:a9b9cb880fa429b0bea899cd3b1bc081ab7277cc97e6d2dcd84bd9753b2027e1
 
-RUN apk add dumb-init
+RUN apk add dumb-init curl
 
 ENV NODE_ENV production
 
