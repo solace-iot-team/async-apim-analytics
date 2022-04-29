@@ -4,6 +4,6 @@ pyyaml
 voluptuous
 yamllint
 rstcheck
-Sphinx
+sphinx
 sphinx-rtd-theme
 sphinxcontrib-contentui
