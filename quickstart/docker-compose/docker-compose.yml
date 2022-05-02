@@ -69,7 +69,7 @@ services:
     depends_on:
       - apim-analytics-server
   grafana:
-    image: grafana/grafana-oss:latest
+    image: grafana/grafana-oss:8.5.1
     ports:
       - ${AMAX_GRAFANA_PORT:-8084}:3000
     volumes:
@@ -78,5 +78,7 @@ services:
       - ./docker-volumes/grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/apim-analytics.yml
       - ./docker-volumes/grafana/dashboards:/var/lib/grafana/dashboards
     restart: unless-stopped
+    depends_on:
+      - prometheus
 volumes:
   apim-connector-mongodb-data:

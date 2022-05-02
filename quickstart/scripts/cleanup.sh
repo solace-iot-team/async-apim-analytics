@@ -8,8 +8,8 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 
 envFile="$scriptDir/../.env"
 
-resourcesDir="$scriptDir/../resources"
 toolsDir="$scriptDir/../../apim-analytics-server/tools"
+resourcesDir="$scriptDir/../resources"
 
 dockerProjectName="amax-qs"
 dockerComposeFile="$scriptDir/../docker-compose/docker-compose.yml"

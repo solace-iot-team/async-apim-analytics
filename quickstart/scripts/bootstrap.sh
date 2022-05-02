@@ -53,7 +53,7 @@ fi
 
 echo ">>> Starting standard services for API Management Analytics ..."
 docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" --profile $dockerProfile up -d --wait $standardServices
-if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose start failed"; exit 1; fi
+if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
 echo ">>> Success"
 
 ###
