@@ -19,7 +19,7 @@ npm install
 
 ### Set Environment Variables
 
-To setup the required **.env** file for the API Management Analytics server:
+To create the **.env** file for the API Management Analytics server:
 
 ```bash
 cp template.env .env
@@ -27,7 +27,7 @@ vi .env
 # change values as needed
 ```
 
-### Install and Setup API Management Connector, Prometheus and Grafana
+### Install and Setup of API Management Connector, Prometheus and Grafana
 
 To create a multi-container Docker application with API Management Connector, Prometheus and Grafana:
 
