@@ -1,6 +1,6 @@
 # Solace Async API Management Analytics Server: Development
 
-## Setup (MacOS)
+## Installation and Setup (MacOS)
 
 ### Install Node.js
 
@@ -9,14 +9,9 @@ brew search node
 brew install node@16
 ````
 
-### Change Node.js Version
+### Install Node.js Packages
 
-```bash
-brew unlink node
-brew link node@14
-```
-
-### Update Node.js Packages
+To install the required Node.js packages for the API Management Analytics server:
 
 ```bash
 npm install
@@ -24,48 +19,74 @@ npm install
 
 ### Set Environment Variables
 
+To setup the required **.env** file for the API Management Analytics server:
+
 ```bash
 cp template.env .env
 vi .env
-# update values as needed
+# change values as needed
+```
+
+### Install and Setup API Management Connector, Prometheus and Grafana
+
+To create a multi-container Docker application with API Management Connector, Prometheus and Grafana:
+
+```bash
+./scripts/bootstrap.sh standard
+```
+
+> The API Management Connector is created with two organizations (organization1, organization2), each with a
+> pre-defined setup of resources (the resources definition files are located in the `resources/` directory).
+
+To create a multi-container Docker application with Prometheus and Grafana (but no API Management Connector):
+
+```bash
+./scripts/bootstrap.sh prometheus-grafana
+```
+
+To stop all services:
+
+```bash
+./scripts/stop.sh
+```
+
+To start all services:
+
+```bash
+./scripts/start.sh
+```
+
+To remove API Management Connector, Prometheus and Grafana:
+
+```bash
+./scripts/clean.sh
 ```
 
 ## Development
 
-### API Management Connector
-
-The API Management Analytics Server requires an API Management Connector. The following scripts can be used to setup, run and
-teardown an API Management Connector on your local machine. [^1]
-
-| Script       | Description |
-|--------------|-------------|
-| bootstrap.sh | Create, start and bootstrap the latest release of the API Management Connector |
-| start.sh     | Start the API Management Connector |
-| stop.sh      | Stop the API Management Connector |
-| cleanup.sh   | Remove the API Management Connector |
-
-[^1]: The API Management Connector is created as multi-container Docker application and requires Docker Engine and Docker Compose,
-      which are both included in Docker Desktop for Mac.
-
 ### Code Analysis
 
+To analyse the source code and check for possible programming problems and errors:
+
 ```bash
-# analyse and check code
 npm run lint
 ```
 
-### Run server for API Management Analytics
+### Start API Management Analytics server
+
+To start the API Management Analytics server:
 
 ```bash
-# start server
 npm start
-# start server with automatic restart when a source file changes
+```
+
+To start the API Management Analytics server with automatic restart when a source file changes:
+
+```bash
 npm run start:watch
 ```
 
 ### Produce and Consume Events
 
-Use MQTTX or another MQTT client to connect and publish or subscribe to topics. The standard setup allows
-to publish events to and received events from the `say/hello/{language}` topic.
+You can use MQTTX or another MQTT client to connect and publish or subscribe to topics.
 
----

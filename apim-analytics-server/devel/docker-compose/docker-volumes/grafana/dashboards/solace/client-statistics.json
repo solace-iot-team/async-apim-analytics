@@ -1,0 +1,1197 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 7,
+  "iteration": 1651218239962,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Connected"
+                },
+                "to": 99999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Not Connected"
+                },
+                "to": 0
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Not Connected"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "count(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}) by (client_id)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Status",
+          "refId": "Connection Status"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "application": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Status"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 6,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[1m:1m]) * 60)[$__range:1m])) by (client_id)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Messages Sent"
+        }
+      ],
+      "title": "Messages Sent",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 7,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_received_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[1m:1m]) * 60)[$__range:1m])) by (client_id)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Messages Received"
+        }
+      ],
+      "title": "Messages Received",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 8,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[1m:1m]) * 60)[$__range:1m])) by (client_id)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Discarded",
+          "refId": "Messages Discarded"
+        }
+      ],
+      "title": "Messages Discarded",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 10,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_sent_bytes_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[1m:1m]) * 60)[$__range:1m])) by (client_id)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Data Sent"
+        }
+      ],
+      "title": "Data Sent",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 11,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_received_bytes_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[1m:1m]) * 60)[$__range:1m])) by (client_id)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Data Received"
+        }
+      ],
+      "title": "Data Received",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "-"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dateTimeFromNow"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 2
+      },
+      "id": 4,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "max_over_time(timestamp(sum(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environment\",client_id=\"$client\"\n}) by(client_id))[1y:$__interval]) * 1000",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Last Active",
+          "refId": "Last Active"
+        }
+      ],
+      "title": "Last Activity",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 0.5,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "msg/s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 13,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_received_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Received"
+        }
+      ],
+      "title": "Message Rate (msg/sec)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "axisSoftMax": 5,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Received.*"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 15,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_sent_bytes_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_received_bytes_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Received"
+        }
+      ],
+      "title": "Data Rate (byte/sec)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 1,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 15,
+        "x": 0,
+        "y": 13
+      },
+      "id": 17,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  environment=\"$environment\",client_id=\"$client\",type=\"incoming\",reason=\"noSubscriptionMatch\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "No Subscription Match",
+          "refId": "No Subscription Match"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\",type=\"incoming\",reason=\"topicParseError\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Topic Parse Error",
+          "refId": "Topic Parse Error"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\",type=\"incoming\",reason=\"webParseError\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",application=\"$application\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Parse Error (Web)",
+          "refId": "Parse Error (Web)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\",type=\"incoming\",reason=\"publishTopicAcl\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Publish Topic ACL",
+          "refId": "Publish Topic ACL"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\",type=\"incoming\",reason=\"msgSpoolCongestion\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Message Spool Congestion",
+          "refId": "Message Spool Congestion"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\",type=\"incoming\",reason=\"msgSpoolDiscards\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Message Spool Discards",
+          "refId": "Message Spool Discards"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\",type=\"outgoing\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_received_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"} * 0) by (organization, application)",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Outgoing",
+          "refId": "Outgoing"
+        }
+      ],
+      "title": "Message Discards",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 19,
+            "lineWidth": 1
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Connected"
+                },
+                "to": 99
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Not Connected"
+                },
+                "to": 0
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 9,
+        "x": 15,
+        "y": 13
+      },
+      "id": 19,
+      "interval": "1m",
+      "maxDataPoints": 20,
+      "options": {
+        "colWidth": 0.8,
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "count(sum_over_time(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=\"$environment\",client_id=\"$client\"\n}[$__interval:1m])) by (client_id)\nor label_replace(vector(0),\"client_id\",\"$client\",\"\",\".*\")",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": " ",
+          "refId": "Connection Status"
+        }
+      ],
+      "title": "Connection Status",
+      "transformations": [],
+      "type": "status-history"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "organization1",
+          "value": "organization1"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info, organization)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info, organization)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "team-a_application",
+          "value": "team-a_application"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info{organization=\"$organization\"}, application)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Application",
+        "multi": false,
+        "name": "application",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info{organization=\"$organization\"}, application)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "development",
+          "value": "development"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_environment_info{organization=\"$organization\"}, environment)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Environment",
+        "multi": false,
+        "name": "environment",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_environment_info{organization=\"$organization\"}, environment)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_client_uptime_seconds_total{organization=\"$organization\",environment=\"$environment\",application=\"$application\"}, client_id)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Client",
+        "multi": false,
+        "name": "client",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_client_uptime_seconds_total{organization=\"$organization\",environment=\"$environment\",application=\"$application\"}, client_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "AsyncAPI Analytics: Client Statistics",
+  "uid": "79c717c3-a9a8-4f0e-ae11-2cf997000542",
+  "version": 12,
+  "weekStart": ""
+}

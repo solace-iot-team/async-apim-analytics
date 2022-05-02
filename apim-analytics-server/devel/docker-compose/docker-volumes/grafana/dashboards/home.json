@@ -1,0 +1,61 @@
+{
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "title": "",
+      "options": {
+        "content": "<div style=\"display: flex; height: 100%; margin: auto 1em;\">\n  <h1 style=\"flex-grow: 1; margin: auto;\">Welcome to Solace AsyncAPI Management Analytics</h1>\n  <a style=\"margin: auto;\" href=\"https://solace-iot-team.github.io/async-apim-analytics/\">Documentation</a>\n</div>",
+        "mode": "html"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "title": "Dashboards",
+      "options": {
+        "folderId": 1,
+        "maxItems": 10,
+        "query": "",
+        "showHeadings": false,
+        "showRecentlyViewed": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": []
+      },
+      "type": "dashlist"
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true,
+    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
+    "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"],
+    "type": "timepicker"
+  },
+  "timezone": "browser",
+  "title": "Home"
+}

@@ -1,0 +1,2154 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "iteration": 1651214494621,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Connected"
+                },
+                "to": 99999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Not Connected"
+                },
+                "to": 0
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Not Connected"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 20,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "count(amax_client_uptime_seconds_total{organization=\"$organization\",environment=~\"$environments\",application=\"$application\"}) by (application)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Client Connections"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "application": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Status"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 15,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (application)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Messages Sent"
+        }
+      ],
+      "title": "Messages Sent",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 16,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_received_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (application)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Messages Received"
+        }
+      ],
+      "title": "Messages Received",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 17,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (application)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Discarded",
+          "refId": "Messages Discarded"
+        }
+      ],
+      "title": "Messages Discarded",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 18,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_sent_bytes_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (application)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Data Sent"
+        }
+      ],
+      "title": "Data Sent",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "id": 19,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(amax_client_messages_received_bytes_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (application)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Data Received"
+        }
+      ],
+      "title": "Data Received",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "-"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "dateTimeFromNow"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 2
+      },
+      "id": 21,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "limit": 1,
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "max_over_time(timestamp(sum(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}) by(application))[1y:$__interval]) * 1000",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Last Active",
+          "refId": "Last Active"
+        }
+      ],
+      "title": "Last Activity",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 0.5,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "msg/s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "id": 2,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_received_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Received"
+        }
+      ],
+      "title": "Message Rate (msg/sec)",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "axisSoftMax": 5,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Received.*"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "id": 7,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_sent_bytes_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "interval": "",
+          "legendFormat": "Sent",
+          "refId": "Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(amax_client_messages_received_bytes_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Received",
+          "refId": "Received"
+        }
+      ],
+      "title": "Data Rate (byte/sec)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 1,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 15,
+        "x": 0,
+        "y": 13
+      },
+      "id": 3,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"noSubscriptionMatch\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "No Subscription Match",
+          "refId": "No Subscription Match"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"topicParseError\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Topic Parse Error",
+          "refId": "Topic Parse Error"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"webParseError\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Parse Error (Web)",
+          "refId": "Parse Error (Web)"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"publishTopicAcl\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Publish Topic ACL",
+          "refId": "Publish Topic ACL"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"msgSpoolCongestion\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Message Spool Congestion",
+          "refId": "Message Spool Congestion"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"incoming\",reason=\"msgSpoolDiscards\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_sent_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Message Spool Discards",
+          "refId": "Message Spool Discards"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "(sum(rate(amax_client_messages_discarded_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\",type=\"outgoing\"\n}[$__interval:1m])) by (organization, application) /\nsum(rate(amax_client_messages_received_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__interval:1m])) by (organization, application) > 0)\nor sum(amax_application_info{organization=\"$organization\",application=\"$application\"}) by (organization,application) * 0",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Outgoing",
+          "refId": "Outgoing"
+        }
+      ],
+      "title": "Message Discards",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 10,
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 9,
+        "x": 15,
+        "y": 13
+      },
+      "id": 9,
+      "interval": "1m",
+      "maxDataPoints": 200,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "asc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": true,
+          "expr": "count(\n  clamp_max(amax_client_uptime_seconds_total{organization=\"$organization\",environment=~\"$environments\",application=\"$application\"}, 1)\n) by (application)\nor sum(amax_application_info{organization=\"$organization\",type=\"team\",owner=\"$owner\",application=\"$application\"} * 0) by (application)",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Client Connections",
+          "refId": "Connections"
+        }
+      ],
+      "title": "Connection Count",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": false,
+              "application": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Client Connections"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Details for Clients, WebHooks, and Guaranteed Messaging",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Data .*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "from": -1,
+                      "result": {
+                        "index": 0,
+                        "text": "-"
+                      },
+                      "to": 0
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Messages .*"
+            },
+            "properties": [
+              {
+                "id": "noValue",
+                "value": "-"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null+nan",
+                      "result": {
+                        "index": 0,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  },
+                  {
+                    "options": {
+                      "from": -1,
+                      "result": {
+                        "index": 1,
+                        "text": "Down"
+                      },
+                      "to": 0
+                    },
+                    "type": "range"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "index": 2,
+                        "text": "Up"
+                      },
+                      "to": 99
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Client ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 325
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Environment"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 133
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 5,
+      "interval": "1m",
+      "options": {
+        "footer": {
+          "fields": [
+            "Value #B",
+            "Value #C"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_client_messages_sent_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "Messages Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_client_messages_received_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Messages Received"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time(sum(rate(amax_client_messages_discarded_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60) without(type, reason) [$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Messages Discarded"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_client_messages_sent_bytes_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Bytes Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_client_messages_received_bytes_total{\n    organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Bytes Received"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "clamp_max(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}, 1) or\nmax_over_time(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__range:1m]) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Status"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n} or\nmax_over_time(amax_client_uptime_seconds_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[$__range:1m]) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Uptime"
+        }
+      ],
+      "title": "Clients",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value #A": true,
+              "__name__": true,
+              "application": true,
+              "instance": true,
+              "job": true,
+              "organization": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #Bytes Received": 12,
+              "Value #Bytes Sent": 11,
+              "Value #Messages Discarded": 10,
+              "Value #Messages Received": 9,
+              "Value #Messages Sent": 8,
+              "Value #Status": 13,
+              "Value #Uptime": 14,
+              "__name__": 1,
+              "application": 5,
+              "client_id": 7,
+              "environment": 6,
+              "instance": 3,
+              "job": 2,
+              "organization": 4
+            },
+            "renameByName": {
+              "Value #A": "Messages Sent",
+              "Value #B": "Messages Sent",
+              "Value #Bytes Received": "Data Received",
+              "Value #Bytes Sent": "Data Sent",
+              "Value #C": "Message Received",
+              "Value #D": "Uptime",
+              "Value #Messages Discarded": "Messages Discarded",
+              "Value #Messages Received": "Messages Received",
+              "Value #Messages Sent": "Messages Sent",
+              "Value #Status": "Status",
+              "Value #Updated": "Last Active",
+              "Value #Uptime": "Uptime",
+              "application": "Application",
+              "client_id": "Client ID",
+              "environment": "Environment",
+              "organization": "Organization",
+              "{client_id=\"#smf/client1/producer\"}": "Bytes Sent"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Client ID"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "decimals": 0,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "from": 0,
+                      "result": {
+                        "index": 0,
+                        "text": "Down"
+                      },
+                      "to": 0
+                    },
+                    "type": "range"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "index": 1,
+                        "text": "Up"
+                      },
+                      "to": 1
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": ".*Rate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Data.*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 13,
+      "interval": "1m",
+      "options": {
+        "footer": {
+          "fields": [
+            "Value #B",
+            "Value #C"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_rdp_http_requests_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Messages Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_rdp_http_requests_bytes_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Data Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum_over_time((rate(amax_rdp_http_responses_success_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m]) / \nsum_over_time((rate(amax_rdp_http_responses_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Success Rate"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "(sum_over_time((rate(amax_rdp_http_responses_error_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m]) + \nsum_over_time((rate(amax_rdp_http_responses_timeout_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) / \nsum_over_time((rate(amax_rdp_http_responses_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Non-Success Rate"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "sum(amax_rdp_up{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}) by (environment, rdp_name)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Status"
+        }
+      ],
+      "title": "WebHooks",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value #A": true,
+              "Value #Messages Delivered": true,
+              "Value #Messages Spooled": true,
+              "__name__": true,
+              "application": true,
+              "environment": false,
+              "instance": true,
+              "job": true,
+              "organization": true,
+              "queue_name": false,
+              "rdp_name": false
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #Data Sent": 8,
+              "Value #Messages Sent": 7,
+              "Value #Non-Success Rate": 9,
+              "Value #Status": 10,
+              "application": 4,
+              "environment": 3,
+              "instance": 2,
+              "job": 1,
+              "organization": 5,
+              "rdp_name": 6
+            },
+            "renameByName": {
+              "Value": "Status",
+              "Value #A": "Messages Sent",
+              "Value #B": "Messages Sent",
+              "Value #Bytes Received": "Data Received",
+              "Value #Bytes Sent": "Data Sent",
+              "Value #C": "Message Received",
+              "Value #Consumers": "Consumers",
+              "Value #D": "Uptime",
+              "Value #Data Sent": "Data Sent",
+              "Value #Errors": "Failed",
+              "Value #Failed": "Failure Rate",
+              "Value #Message Spool Peak Usage": "Spool Peak Usage",
+              "Value #Message Spool Usage": "Spool Usage",
+              "Value #Messages Delivered": "Messages Spooled",
+              "Value #Messages Discarded": "Messages Discarded",
+              "Value #Messages Not Delivered": "Discarded or Removed",
+              "Value #Messages Not Queued": "Messages Not Queued",
+              "Value #Messages Queued": "Messages Queued",
+              "Value #Messages Received": "Messages Received",
+              "Value #Messages Rejected": "Messages Discarded",
+              "Value #Messages Removed": "Messages Removed",
+              "Value #Messages Sent": "Messages Sent",
+              "Value #Messages Spooled": "Messages Spooled",
+              "Value #Non-Success Rate": "Failure Rate",
+              "Value #Requests": "Messages Sent",
+              "Value #Responded": "Successful",
+              "Value #Responses": "Responses",
+              "Value #Spool Peak Usage": "Message Spool Peak Usage",
+              "Value #Spool Usage": "Message Spool Usage",
+              "Value #Status": "Status",
+              "Value #Success": "Responses",
+              "Value #Success Rate": "Success Rate",
+              "Value #Timeouts": "Timeouts",
+              "Value #Updated": "Last Active",
+              "Value #Uptime": "Uptime",
+              "application": "Application",
+              "client_id": "Client ID",
+              "environment": "Environment",
+              "organization": "Organization",
+              "queue_name": "Queue Name",
+              "rdp_name": "Rest Delivery Point",
+              "{client_id=\"#smf/client1/producer\"}": "Bytes Sent"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "Rest Delivery Point"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "decimals": 0,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Spool.*Usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Queue Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 430
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Environment"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 149
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 11,
+      "interval": "1m",
+      "options": {
+        "footer": {
+          "fields": [
+            "Value #B",
+            "Value #C"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(amax_queue_consumer_count{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}) by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Consumers"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(amax_queue_messages_queued{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}) by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "Messages Queued"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(amax_queue_message_spool_usage_bytes{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}) by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Message Spool Usage"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(amax_queue_message_spool_peak_usage_bytes{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n})by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Message Spool Peak Usage"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(sum_over_time((rate(amax_queue_messages_spooled_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Messages Spooled"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "exemplar": false,
+          "expr": "label_replace(sum(sum_over_time((rate(amax_queue_messages_not_queued_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (environment, queue_name) +\nsum(sum_over_time((rate(amax_queue_messages_removed_total{\n  organization=\"$organization\",environment=~\"$environments\",application=\"$application\"\n}[1m:1m]) * 60)[$__range:1m])) by (environment, queue_name), \"queue_name\", \"$1\", \"queue_name\", \"[^-]+-(.*)\")",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Messages Discarded"
+        }
+      ],
+      "title": "Guaranteed Messaging",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value #A": true,
+              "Value #Consumers": false,
+              "Value #Message Spool Peak Usage": false,
+              "Value #Message Spool Usage": false,
+              "Value #Messages Delivered": true,
+              "Value #Messages Spooled": true,
+              "__name__": true,
+              "application": true,
+              "environment": false,
+              "instance": true,
+              "job": true,
+              "organization": true,
+              "queue_name": false
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #Consumers": 3,
+              "Value #Message Spool Peak Usage": 7,
+              "Value #Message Spool Usage": 6,
+              "Value #Messages Discarded": 5,
+              "Value #Messages Queued": 4,
+              "Value #Messages Spooled": 8,
+              "environment": 1,
+              "queue_name": 2
+            },
+            "renameByName": {
+              "Value #A": "Messages Sent",
+              "Value #B": "Messages Sent",
+              "Value #Bytes Received": "Data Received",
+              "Value #Bytes Sent": "Data Sent",
+              "Value #C": "Message Received",
+              "Value #Consumers": "Consumers",
+              "Value #D": "Uptime",
+              "Value #Message Spool Peak Usage": "Spool Peak Usage",
+              "Value #Message Spool Usage": "Spool Usage",
+              "Value #Messages Delivered": "Messages Spooled",
+              "Value #Messages Discarded": "Messages Discarded",
+              "Value #Messages Not Delivered": "Discarded or Removed",
+              "Value #Messages Not Queued": "Messages Not Queued",
+              "Value #Messages Queued": "Messages Queued",
+              "Value #Messages Received": "Messages Received",
+              "Value #Messages Rejected": "Messages Discarded",
+              "Value #Messages Removed": "Messages Removed",
+              "Value #Messages Sent": "Messages Sent",
+              "Value #Messages Spooled": "Messages Spooled",
+              "Value #Spool Peak Usage": "Message Spool Peak Usage",
+              "Value #Spool Usage": "Message Spool Usage",
+              "Value #Status": "Status",
+              "Value #Updated": "Last Active",
+              "Value #Uptime": "Uptime",
+              "application": "Application",
+              "client_id": "Client ID",
+              "environment": "Environment",
+              "organization": "Organization",
+              "queue_name": "API Product",
+              "{client_id=\"#smf/client1/producer\"}": "Bytes Sent"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "API Product"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "organization1",
+          "value": "organization1"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info, organization)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info, organization)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "team",
+          "value": "team"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Team or Developer",
+        "multi": false,
+        "name": "type",
+        "options": [
+          {
+            "selected": true,
+            "text": "team",
+            "value": "team"
+          },
+          {
+            "selected": false,
+            "text": "developer",
+            "value": "developer"
+          }
+        ],
+        "query": "team, developer",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "team-a",
+          "value": "team-a"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info{organization=\"$organization\",type=\"$type\"}, owner)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Owner",
+        "multi": false,
+        "name": "owner",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info{organization=\"$organization\",type=\"$type\"}, owner)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "team-a_application",
+          "value": "team-a_application"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info{organization=\"$organization\",type=\"$type\",owner=\"$owner\"}, application)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Application",
+        "multi": false,
+        "name": "application",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info{organization=\"$organization\",type=\"$type\",owner=\"$owner\"}, application)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_environment_info{organization=\"$organization\"}, environment)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Environments",
+        "multi": true,
+        "name": "environments",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_environment_info{organization=\"$organization\"}, environment)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "AsyncAPI Analytics: Application Statistics",
+  "uid": "36017999-2a47-4c2b-8a11-7a5ef622d074",
+  "version": 1,
+  "weekStart": ""
+}
