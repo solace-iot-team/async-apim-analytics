@@ -57,7 +57,7 @@ export class ServerConfig {
    */
   constructor() {
 
-    this.#port = getEnvVarAsNumber('AMAX_SERVER_PORT', 8081);
+    this.#port = getEnvVarAsNumber('AMAX_SERVER_PORT', 8082);
 
     const serverUsername = getEnvVarAsString('AMAX_SERVER_USERNAME');
     const serverPassword = getEnvVarAsString('AMAX_SERVER_PASSWORD');
@@ -71,7 +71,7 @@ export class ServerConfig {
     // initialze configuration for API-M connector
 
     const connectorHost = getEnvVarAsString('AMAX_SERVER_CONNECTOR_HOST', 'localhost');
-    const connectorPort = getEnvVarAsNumber('AMAX_SERVER_CONNECTOR_PORT', 8080);
+    const connectorPort = getEnvVarAsNumber('AMAX_SERVER_CONNECTOR_PORT', 8088);
 
     const connectorUsername = getEnvVarAsString('AMAX_SERVER_CONNECTOR_USERNAME');
     const connectorPassword = getEnvVarAsString('AMAX_SERVER_CONNECTOR_PASSWORD');
