@@ -8,7 +8,7 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 
 envFile="$scriptDir/../.env"
 
-toolsDir="$scriptDir/../../apim-analytics-server/tools"
+toolsDir="$scriptDir/../../apim-analytics-tools"
 resourcesDir="$scriptDir/../resources"
 
 dockerProjectName="amax-qs"
@@ -32,8 +32,8 @@ if [[ $? == 0 ]]; then
   echo ">>> Success"
 
   echo ">>> Cleaning up API Management Connector ..."
-  DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" delete "$resourcesDir/organization1.json"
-  if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts delete failed"; exit 1; fi
+  DOTENV_CONFIG_PATH="$envFile" npx --silent --prefix "$toolsDir" run configure-connector delete "$resourcesDir/apim-connector/organization1.json"
+  if [[ $? != 0 ]]; then echo ">>> ERROR: configure-connector delete failed"; exit 1; fi
   echo ">>> Success"
 
 fi

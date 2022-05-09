@@ -27,7 +27,7 @@
   "apis": [
     {
       "name": "say-hello",
-      "uri": "./apis/say-hello.yml"
+      "uri": "../apis/say-hello.yml"
     },
     {
       "name": "administration",

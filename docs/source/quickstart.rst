@@ -10,4 +10,5 @@ Quickstart
   quickstart-content/installing
   quickstart-content/uninstalling
   quickstart-content/stopping-and-starting
+  quickstart-content/simulating-workload
   quickstart-content/reference
