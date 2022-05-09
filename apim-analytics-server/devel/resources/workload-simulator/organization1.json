@@ -1,0 +1,32 @@
+{
+  "server": {
+    "baseUrl": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/v1",
+    "admin": {
+      "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"
+    }
+  },
+  "organization": "organization1",
+  "environments": [
+    "development"
+  ],
+  "producers": {
+    "count": 4,
+    "lifespan": "10m",
+    "idleTime": "500",
+    "applications": [
+      "team-a_application-a1",
+      "team-a_application-a2",
+      "team-b_application-b1"
+    ]
+  },
+  "consumers": {
+    "count": 4,
+    "lifespan": "15m",
+    "applications": [
+      "team-b_application-b1",
+      "team-x_application-x1",
+      "team-x_application-x2"
+    ]
+  }
+}

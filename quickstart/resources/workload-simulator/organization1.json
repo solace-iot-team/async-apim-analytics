@@ -1,0 +1,22 @@
+{
+  "server": {
+    "baseUrl": "http://localhost:${env:AMAX_CONNECTOR_PORT}/v1",
+    "admin": {
+      "username": "${env:AMAX_CONNECTOR_USERNAME}",
+      "password": "${env:AMAX_CONNECTOR_PASSWORD}"
+    }
+  },
+  "organization": "organization1",
+  "environments": [
+    "development"
+  ],
+  "producers": {
+    "count": 2,
+    "lifespan": "5m",
+    "idleTime": "500"
+  },
+  "consumers": {
+    "count": 2,
+    "lifespan": "10m"
+  }
+}
