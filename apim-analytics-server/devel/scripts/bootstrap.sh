@@ -8,7 +8,7 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 
 envFile="$scriptDir/../.env"
 
-toolsDir="$scriptDir/../../tools"
+toolsDir="$scriptDir/../../../apim-analytics-tools"
 resourcesDir="$scriptDir/../resources"
 
 dockerProjectName="amax-devel"
@@ -43,10 +43,10 @@ if [ "$dockerProfile" == "standard" ]; then
   echo ">>> Success"
 
   echo ">>> Configuring API Management Connector ..."
-  DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "$resourcesDir/organization1.json"
-  if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create-resources failed"; exit 1; fi
-  DOTENV_CONFIG_PATH="$envFile" "$toolsDir/connector.ts" create "$resourcesDir/organization2.json"
-  if [[ $? != 0 ]]; then echo ">>> ERROR: connector.ts create-resources failed"; exit 1; fi
+  DOTENV_CONFIG_PATH="$envFile" npm --silent --prefix "$toolsDir" run configure-connector create "$resourcesDir/apim-connector/organization1.json"
+  if [[ $? != 0 ]]; then echo ">>> ERROR: configure-connector create failed"; exit 1; fi
+  DOTENV_CONFIG_PATH="$envFile" npm --silent --prefix "$toolsDir" run configure-connector create "$resourcesDir/apim-connector/organization2.json"
+  if [[ $? != 0 ]]; then echo ">>> ERROR: configure-connector create failed"; exit 1; fi
   echo ">>> Success"
 
 fi

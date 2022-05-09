@@ -222,7 +222,7 @@ const createApiProduct = async (resourceSet: ResourceSet, apiProductResource: Ap
   const organization = resourceSet.organization;
   const environments = apiProductResource.environments ?? resourceSet.environments.map(item => item.name);
 
-  let protocols = new Set<string>();
+  const protocols = new Set<string>();
   try {
     const orgctx = { organizationName: organization.name };
     for (const environment of environments) {

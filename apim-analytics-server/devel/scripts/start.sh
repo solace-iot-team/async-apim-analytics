@@ -8,9 +8,6 @@ scriptName=$(basename $(test -L "$0" && readlink "$0" || echo "$0"));
 
 envFile="$scriptDir/../.env"
 
-toolsDir="$scriptDir/../../tools"
-resourcesDir="$scriptDir/../resources"
-
 dockerProjectName="amax-devel"
 dockerComposeFile="$scriptDir/../docker-compose/docker-compose.yml"
 
