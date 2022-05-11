@@ -1,6 +1,6 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { Team } from '../../models/team';
+import { Server } from '../../model/server';
+import { Team } from '../../model/team';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
 
 /**

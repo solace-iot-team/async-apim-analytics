@@ -3,10 +3,10 @@ import Bree from 'bree';
 import * as prometheus from 'prom-client';
 import { Logger as L } from '../../common/logger';
 import { AbstractCollector } from '../abstract-collector';
-import { Server } from '../../models/server';
-import { Application } from '../../models/application';
-import { Environment } from '../../models/environment';
-import { Queue } from '../../models/queue';
+import { Server } from '../../model/server';
+import { Application } from '../../model/application';
+import { Environment } from '../../model/environment';
+import { Queue } from '../../model/queue';
 
 const OFFSET = '30s';
 const INTERVAL = '60s';

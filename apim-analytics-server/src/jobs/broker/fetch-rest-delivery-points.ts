@@ -1,8 +1,8 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { Application } from '../../models/application';
-import { Environment } from '../../models/environment';
-import { RestDeliveryPoint } from '../../models/rest-delivery-point';
+import { Server } from '../../model/server';
+import { Application } from '../../model/application';
+import { Environment } from '../../model/environment';
+import { RestDeliveryPoint } from '../../model/rest-delivery-point';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
 import { getSempV2MonitorEndpoint } from '../../utils/solace-cloud-helper';
 

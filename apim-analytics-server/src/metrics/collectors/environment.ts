@@ -3,8 +3,8 @@ import Bree from 'bree';
 import * as prometheus from 'prom-client';
 import { Logger as L } from '../../common/logger';
 import { AbstractCollector } from '../abstract-collector';
-import { Server } from '../../models/server';
-import { Environment } from '../../models/environment';
+import { Server } from '../../model/server';
+import { Environment } from '../../model/environment';
 
 const OFFSET = 0;
 const INTERVAL = '240s';

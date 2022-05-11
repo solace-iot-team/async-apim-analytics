@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Server } from '../models/server';
+import { Server } from '../model/server';
 
 // HELPER
 

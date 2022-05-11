@@ -1,5 +1,5 @@
-import { Server } from '../models/server';
-import { Endpoint } from '../models/endpoint';
+import { Server } from '../model/server';
+import { Endpoint } from '../model/endpoint';
 import { createAuthorizationHeader, fetchData } from './fetch';
 
 interface NamedItem {
