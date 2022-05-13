@@ -32,7 +32,7 @@ standardServices="apim-analytics-server prometheus grafana"
 ############################################################################################################################
 # Run
 
-echo ">>> Creating services for API Management Analytics ..."
+echo ">>> Creating services for API Management Analytics quickstart ..."
 docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" --profile $dockerProfile up --no-start
 if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
 echo ">>> Success"
@@ -40,9 +40,11 @@ echo ">>> Success"
 if [ "$dockerProfile" == "all-in-one" ]; then
 
   echo ">>> Starting API Management Connector ..."
-  docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" --profile $dockerProfile up -d --wait apim-connector
+  docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d apim-connector
   if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
   echo ">>> Success"
+
+  "$scriptDir/internal/wait-for-apim-connector.sh"
 
   echo ">>> Configuring API Management Connector ..."
   DOTENV_CONFIG_PATH="$envFile" npm --silent --prefix "$toolsDir" run configure-connector create "$resourcesDir/apim-connector/organization1.json"
@@ -51,8 +53,8 @@ if [ "$dockerProfile" == "all-in-one" ]; then
 
 fi
 
-echo ">>> Starting standard services for API Management Analytics ..."
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" --profile $dockerProfile up -d --wait $standardServices
+echo ">>> Starting standard services for API Management Analytics quickstart ..."
+docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d $standardServices
 if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
 echo ">>> Success"
 
