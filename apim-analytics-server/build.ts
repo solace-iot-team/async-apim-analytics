@@ -22,7 +22,7 @@ type About = {
 }
 
 const prepare = () => {
-
+  if (s.mkdir('-p', './public').code !== 0) process.exit(1);
 }
 
 const createAbout = () => {
@@ -53,12 +53,19 @@ const createAbout = () => {
     fs.writeFileSync(filename, JSON.stringify(about, null, 2));
   } catch (error) {
     console.log(`ERROR: failed to write about file '${filename}'`);
+    process.exit(1);
   }
+}
+
+const copyAssets = () => {
+  // public resources
+  if (s.cp('-rf', 'public', './dist/public').code !== 0) process.exit(1);
 }
 
 const main = () => {
   prepare();
   createAbout();
+  copyAssets();
 }
 
 main();
