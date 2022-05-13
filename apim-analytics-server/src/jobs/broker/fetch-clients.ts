@@ -1,10 +1,11 @@
 import { parentPort, workerData } from 'node:worker_threads';
+import config from '../../common/config';
 import { Application } from '../../model/application';
 import { Environment } from '../../model/environment';
 import { Client } from '../../model/client';
 import { Server } from '../../model/server';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
-import { getSempV2MonitorEndpoint } from '../../utils/solace-cloud-helper';
+import { getSempV2MonitorEndpoint } from '../../utils/solace-cloud-api';
 
 /** The list of client properties to retrieve from the server. */
 const clientProperties = [
@@ -33,8 +34,8 @@ const clientProperties = [
  * 
  * This function doesn't return information for RDP clients for web hooks.
  * 
- * @param server 
- *                The PubSub+ server.
+ * @param server
+ *                The API Management Connector configuration.
  * @param environment 
  *                The target environment.
  * @param applications 
@@ -46,7 +47,7 @@ const getClients = async (server: Server, environment: Environment, applications
 
   const clients: Client[] = [];
 
-  const endpoint = await getSempV2MonitorEndpoint(server, environment.serviceId);
+  const endpoint = await getSempV2MonitorEndpoint(server, environment.meta.organization, environment.serviceId);
   const headers = createAuthorizationHeader(endpoint);
 
   const vpnName = environment.vpnName;
@@ -103,8 +104,8 @@ const getClients = async (server: Server, environment: Environment, applications
 
   const clients: Client[] = [];
 
-  const server: Server = workerData.server;
-  if (!server) throw new Error('server configuration is not set');
+  const server: Server = config.connectorServer;
+  if (!server) throw new Error('API Management Connector is not configured');
 
   const environments: Environment[] = workerData.environments || [];
   const applications: Application[] = workerData.applications || [];

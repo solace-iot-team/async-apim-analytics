@@ -1,9 +1,9 @@
 import path from 'node:path';
 import Bree from 'bree';
 import * as prometheus from 'prom-client';
-import { Logger as L } from '../../common/logger';
 import { AbstractCollector } from '../abstract-collector';
-import { Server } from '../../model/server';
+import { Constants } from '../../common/constants';
+import { Logger as L } from '../../common/logger';
 import { Application } from '../../model/application';
 import { Environment } from '../../model/environment';
 import { Queue } from '../../model/queue';
@@ -13,7 +13,6 @@ const INTERVAL = '60s';
 
 /** The metadata for the collector. */
 type CollectorMetadata = {
-  server?: Server;
   applications?: Application[];
   environments?: Environment[];
 }
@@ -37,20 +36,15 @@ export class QueueMetricsCollector extends AbstractCollector<Events> {
   /**
    * Constructor for a collector for queue metrics.
    * 
-   * @param namePrefix
-   *              The name prefix for any metrics.
-   * @param server
-   *              The server configuration for the Solace PubSub+ Cloud.
    * @param applications
    *              The applications for which to collect metrics.
    * @param environments
    *              The environments for which to collect metrics.
    */
-  constructor(namePrefix: string, server: Server, applications?: Application[], environments?: Environment[]) {
+  constructor(applications?: Application[], environments?: Environment[]) {
 
     super('QueueMetricsCollector', path.join(__dirname, '../../jobs/broker'));
 
-    this.server = server;
     if (applications) {
       this.applications = applications;
     }
@@ -58,13 +52,8 @@ export class QueueMetricsCollector extends AbstractCollector<Events> {
       this.environments = environments;
     }
 
-    this.#registerMetrics(namePrefix);
+    this.#registerMetrics(Constants.METRICS_PREFIX);
     this.#createJobs();
-  }
-
-  /** Setter for server configuration. */
-  set server(server: Server) {
-    this.#metadata.server = server;
   }
 
   /** Setter for applications metadata. */

@@ -58,6 +58,8 @@ const createAbout = () => {
 }
 
 const copyAssets = () => {
+  // API specification
+  if (s.cp('./src/common/api.yml', './dist/common/api.yml').code !== 0) process.exit(1);
   // public resources
   if (s.cp('-rf', 'public', './dist/public').code !== 0) process.exit(1);
 }

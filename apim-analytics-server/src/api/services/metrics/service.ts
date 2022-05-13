@@ -1,5 +1,4 @@
 import * as prometheus from 'prom-client';
-import config from '../../../common/config';
 import { AbstractCollector } from '../../../metrics/abstract-collector';
 import { EnvironmentMetricsCollector } from '../../../metrics/collectors/environment';
 import { TeamMetricsCollector } from '../../../metrics/collectors/team';
@@ -9,11 +8,9 @@ import { ClientMetricsCollector } from '../../../metrics/collectors/client';
 import { QueueMetricsCollector } from '../../../metrics/collectors/queue';
 import { RestDeliveryPointMetricsCollector } from '../../../metrics/collectors/rest-delivery-point';
 
-// CONFIG
-
-const metricsPrefix = 'amax';
-
-/** The metrics service. */
+/**
+ * The metrics service.
+ */
 class MetricsService {
 
   /** The metrics registry. */
@@ -22,21 +19,17 @@ class MetricsService {
   /** Constructor. */
   constructor() {
 
-    const organizations = config.organizations;
-    const connector = config.connectorServer;
-    const pubSubCloud = config.pubSubCloudServer;
-
     // Create all metrics collectors
 
-    const environmentMetricCollector = new EnvironmentMetricsCollector(metricsPrefix, connector, organizations);
-    const teamMetricCollector = new TeamMetricsCollector(metricsPrefix, connector, organizations);
-    const developerMetricCollector = new DeveloperMetricsCollector(metricsPrefix, connector, organizations);
-    const applicationMetricCollector = new ApplicationMetricsCollector(metricsPrefix, connector);
-    const clientMetricsCollector = new ClientMetricsCollector(metricsPrefix, pubSubCloud);
-    const queueMetricsCollector = new QueueMetricsCollector(metricsPrefix, pubSubCloud);
-    const restDeliveryPointMetricsCollector = new RestDeliveryPointMetricsCollector(metricsPrefix, pubSubCloud);
+    const environmentMetricCollector = new EnvironmentMetricsCollector();
+    const teamMetricCollector = new TeamMetricsCollector();
+    const developerMetricCollector = new DeveloperMetricsCollector();
+    const applicationMetricCollector = new ApplicationMetricsCollector();
+    const clientMetricsCollector = new ClientMetricsCollector();
+    const queueMetricsCollector = new QueueMetricsCollector();
+    const restDeliveryPointMetricsCollector = new RestDeliveryPointMetricsCollector();
 
-    // Some metrics collector depend on data from others.
+    // Some collectors depend on data from others.
     // Use event listeners to update the metadata for those collectors.
 
     teamMetricCollector.on('update', teams => {
@@ -59,7 +52,7 @@ class MetricsService {
       restDeliveryPointMetricsCollector.applications = applications;
     });
 
-    // Start data collection for all connectors and create a merged registry
+    // Start data collection for all metrics and create a merged registry
 
     const collectors: AbstractCollector[] = [
       environmentMetricCollector,
@@ -77,10 +70,15 @@ class MetricsService {
     this.#registry = prometheus.Registry.merge(registries);
   }
 
+  /**
+   * Returns all metrics.
+   * 
+   * @returns The metrics.
+   */
   async all(): Promise<string> {
     return this.#registry.metrics();
   }
 
-}
+} // class MetricsService
 
 export default new MetricsService();

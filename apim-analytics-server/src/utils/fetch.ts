@@ -1,5 +1,4 @@
 import fetch, { HeaderInit } from 'node-fetch';
-
 import { Server } from '../model/server';
 import { Endpoint } from '../model/endpoint';
 

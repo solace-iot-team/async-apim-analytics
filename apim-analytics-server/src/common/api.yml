@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: Solace Async API Management Analytics Server
+  description: Solace Async API Management Analytics Server API
+  version: 0.1.0
+servers:
+- url: /v1
+
+tags:
+- name: organizations
+  description: Manage organizations
+- name: metrics
+  description: Provide API and application metrics
+
+paths:
+  /organizations:
+    get:
+      tags:
+      - organizations
+      summary: Fetches all organizations
+      operationId: getOrganizations
+      responses:
+        '200':
+          description: The organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+      - organizations
+      summary: Creates an organization
+      operationId: createOrganization
+      requestBody:
+        description: The new organization
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+      responses:
+        '201':
+          description: The created organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '422':
+          description: 'Duplicate organization'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{organization_name}:
+    parameters:
+    - $ref: '#/components/parameters/Organization'
+    get:
+      tags:
+      - organizations
+      summary: Fetches an organizations
+      operationId: getOrganization
+      responses:
+        '200':
+          description: The organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      tags:
+      - organizations
+      summary: Updates an organization
+      operationId: updateOrganization
+      requestBody:
+        description: The properties of the organization that should be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationPatch'
+      responses:
+        '200':
+          description: The updated organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/UnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+      - organizations
+      summary: Deletes an organization
+      operationId: deleteOrganization
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /metrics:
+    get:
+      tags:
+      - metrics
+      summary: Fetches current API and application metrics
+      operationId: getMetrics
+      responses:
+        '200':
+          description: The current API and application metrics
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    OrganizationName:
+      description: The name of the organization
+      type: string
+      pattern: ^[a-zA-Z0-9_-]*$
+      minLength: 4
+      maxLength: 188
+    Organization:
+      description: Information about an organization
+      type: object
+      required:
+      - name
+      additionalProperties: false
+      properties:
+        name:
+          $ref: '#/components/schemas/OrganizationName'
+        enabled:
+          description: Whether analytics are enabled for the organization
+          type: boolean
+          default: true
+    OrganizationPatch:
+      description: Information about an organization patch
+      type: object
+      additionalProperties: false
+      properties:
+        enabled:
+          description: Whether analytics are enabled for the organization
+          type: boolean
+    Error:
+      description: Information about an error
+      type: object
+      required:
+      - message
+      additionalProperties: false
+      properties:
+        message:
+          description: A short description of the error
+          type: string
+          minLength: 0
+          maxLength: 1024
+          example: The request is invalid
+        details:
+          description: A detailed explanation of the error
+          oneOf:
+          - type: string
+          - type: object
+          - type: array
+            items: {}
+  responses:
+    NoContent:
+      description: No Content
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: Unsupported media type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Organization:
+      name: organization_name
+      description: The name of the organization
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrganizationName'
