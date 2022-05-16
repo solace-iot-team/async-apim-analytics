@@ -10,12 +10,15 @@ export $(grep -v '^#' "$scriptDir/../../.env" | xargs -0)
 ############################################################################################################################
 # Run
 
-printf "Wait until API Management Connector is available "
-until curl http://localhost:${AMAX_CONNECTOR_PORT:-8082} -o /dev/null --silent; do
-  printf "."
-  sleep 1
+for organization in $(echo $AMAX_ORGANIZATIONS | tr ',' '\n')
+do
+  curl -X POST -u $AMAX_SERVER_USERNAME:$AMAX_SERVER_PASSWORD http://localhost:${AMAX_SERVER_PORT:-8088}/v1/organizations -d '''
+  {
+    "name": "$organization",
+    "enabled": true
+  }
+  '''
 done
-printf "\r\033[2K"
 
 ####
 # End

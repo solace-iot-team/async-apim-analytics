@@ -9,7 +9,8 @@ You can install API Management Analytics with one of the following profiles:
 
   This installation profile creates a multi-container application with the following services:
 
-  - API Management Analytics server
+  - API Management Analytics
+  - MongoDB
   - Prometheus
   - Grafana
 
@@ -19,9 +20,9 @@ You can install API Management Analytics with one of the following profiles:
 
   This installation profile creates a multi-container application with the following services:
   
-  - API Management Connector database
-  - API Management Connector server
-  - API Management Analytics server
+  - API Management Connector
+  - API Management Analytics
+  - MongoDB
   - Prometheus
   - Grafana
 
@@ -42,9 +43,9 @@ You can install API Management Analytics with one of the following profiles:
 Before You Begin
 ++++++++++++++++
 
-1. Download the `latest release`_ of Solace Async API Management Analytics and extract the files to the ``<ANALYTICS_HOME>`` directory
+1. Download the `latest release`_ of Solace Async API Management Analytics and extract the files to the ``<ANALYTICS_HOME>`` directory.
 
-2. Install dependencies for the API Management Analytics tools
+2. Install dependencies for the API Management Analytics tools.
 
    .. code-block:: bash
 
@@ -55,25 +56,31 @@ Before You Begin
 Installation Procedure
 ++++++++++++++++++++++
 
-1. Create the **.env** file
+1. Create the **.env** file using the provided template.
 
    .. code-block:: bash
 
       cd <ANALYTICS_HOME>/quickstart
       cp template.env .env
 
-2. In the created **.env** file:
+2. Update the **.env** file.
 
-   - Replace ``{solace-cloud-token}`` with the API token for Solace's Cloud REST API
-   - Replace ``{solace-service-id}`` with the ID of the Solace Cloud service you want to use
-   - Change the values of ``AMAX_SERVER_USERNAME`` and ``AMAX_SERVER_PASSWORD``
-   - Change the values of ``AMAX_SERVER_CONNECTOR_USERNAME`` and ``AMAX_SERVER_CONNECTOR_PASSWORD``
+   a) Change the values of the following variables:
 
-.. |br| raw:: html
+     * ``AMAX_SERVER_USERNAME``
+     * ``AMAX_SERVER_PASSWORD``
+     * ``AMAX_SERVER_CONNECTOR_USERNAME``
+     * ``AMAX_SERVER_CONNECTOR_PASSWORD``
 
-    <br/>
+   b) If you want to use the **standard** profile, replace the value of ``AMAX_ORGANIZATIONS`` with
+      a comma-separated list of organizations for which you want to enable analytics.
 
-3. Create, start and bootstrap the API Management Analytics components
+   c) If you want to use the **all-in-one** profile:
+
+     * Replace ``{solace-cloud-token}`` with the API token for Solace's Cloud REST API.
+     * Replace ``{solace-service-id}`` with the ID of the Solace Cloud service you want to use.
+
+3. Create, start and bootstrap the API Management Analytics components.
 
    - Using the **standard** profile:
 

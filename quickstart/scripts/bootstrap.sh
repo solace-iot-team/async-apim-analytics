@@ -20,7 +20,7 @@ if [ "$dockerProfile" != "all-in-one" ] && [ "$dockerProfile" != "standard" ]; t
   exit 1
 fi
 
-standardServices="apim-analytics-server prometheus grafana"
+standardServices="apim-analytics prometheus grafana"
 
 ############################################################################################################################
 # Prepare
@@ -56,6 +56,13 @@ fi
 echo ">>> Starting standard services for API Management Analytics quickstart ..."
 docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d $standardServices
 if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
+echo ">>> Success"
+
+"$scriptDir/internal/wait-for-analytics-server.sh"
+
+echo ">>> Enable analytics ..."
+"$scriptDir/internal/enable-analytics.sh"
+if [[ $? != 0 ]]; then echo ">>> ERROR: enable-analytics failed"; exit 1; fi
 echo ">>> Success"
 
 ###

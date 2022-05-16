@@ -1,11 +1,9 @@
 services:
-  apim-connector-mongodb:
+  mongodb:
     image: mongo:latest
     volumes:
-      - apim-connector-mongodb-data:/data/db
+      - mongodb-data:/data/db
     restart: unless-stopped
-    profiles:
-      - all-in-one
   apim-connector:
     image: solaceiotteam/apim-connector-server:latest
     ports:
@@ -17,7 +15,7 @@ services:
       - ./docker-volumes/apim-connector:/data
     restart: unless-stopped
     environment:
-      - DB_URL=mongodb://apim-connector-mongodb:27017/platform?retryWrites=true&w=majority
+      - DB_URL=mongodb://mongodb:27017/platform?retryWrites=true&w=majority
       - LOG_LEVEL=debug
       - APP_ID=apim-connector-server
       - FILE_USER_REGISTRY=/data/user-registry.json
@@ -34,10 +32,10 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      - apim-connector-mongodb
+      - mongodb
     profiles:
       - all-in-one
-  apim-analytics-server:
+  apim-analytics:
     image: solaceiotteam/apim-analytics-server:latest
     ports:
       - ${AMAX_SERVER_PORT:-8088}:3000
@@ -50,24 +48,24 @@ services:
       - AMAX_SERVER_USERNAME=${AMAX_SERVER_USERNAME}
       - AMAX_SERVER_PASSWORD=${AMAX_SERVER_PASSWORD}
       - AMAX_SERVER_LOGGER_LOG_LEVEL=${AMAX_SERVER_LOGGER_LOG_LEVEL:-debug}
+      - AMAX_SERVER_MONGODB_URL=mongodb://mongodb:27017
       - AMAX_SERVER_CONNECTOR_HOST=${AMAX_CONNECTOR_HOST:-host.docker.internal}
-      - AMAX_SERVER_CONNECTOR_PORT=${AMAX_CONNECTOR_PORT:-8080}
+      - AMAX_SERVER_CONNECTOR_PORT=${AMAX_CONNECTOR_PORT:-8082}
       - AMAX_SERVER_CONNECTOR_USERNAME=${AMAX_CONNECTOR_USERNAME}
       - AMAX_SERVER_CONNECTOR_PASSWORD=${AMAX_CONNECTOR_PASSWORD}
-      - AMAX_SERVER_SOLACE_CLOUD_URL=${AMAX_SOLACE_CLOUD_URL}
-      - AMAX_SERVER_SOLACE_CLOUD_TOKEN=${AMAX_SOLACE_CLOUD_TOKEN}
-      - AMAX_SERVER_ORGANIZATIONS=${AMAX_SERVER_ORGANIZATIONS}
     logging:
       options:
         max-size: "10m"
         max-file: "3"
+    depends_on:
+      - mongodb
   prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./docker-volumes/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: unless-stopped
     depends_on:
-      - apim-analytics-server
+      - apim-analytics
   grafana:
     image: grafana/grafana-oss:8.5.1
     ports:
@@ -81,4 +79,4 @@ services:
     depends_on:
       - prometheus
 volumes:
-  apim-connector-mongodb-data:
+  mongodb-data:

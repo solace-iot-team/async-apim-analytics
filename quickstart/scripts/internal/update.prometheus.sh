@@ -3,16 +3,9 @@
 scriptDir=$(cd $(dirname "$0") && pwd);
 
 ############################################################################################################################
-# Settings
+# Prepare
 
-envFile="$scriptDir/../../.env"
-
-############################################################################################################################
-# Helper
-
-function getenv {
-  grep "${1}" "$envFile" | cut -f 2 -d '='
-}
+export $(grep -v '^#' "$scriptDir/../../.env" | xargs -0)
 
 ############################################################################################################################
 # Run
@@ -30,8 +23,8 @@ scrape_configs:
     - targets: ["apim-analytics-server:3000"]
     metrics_path: "/v1/metrics"
     basic_auth:
-      username: "$(getenv AMAX_SERVER_USERNAME)"
-      password: "$(getenv AMAX_SERVER_PASSWORD)"
+      username: "$AMAX_SERVER_USERNAME"
+      password: "$AMAX_SERVER_PASSWORD"
 EOF
 
 ####
