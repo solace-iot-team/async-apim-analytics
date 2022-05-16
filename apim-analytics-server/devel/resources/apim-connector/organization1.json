@@ -8,7 +8,7 @@
   },
   "organization": {
     "name": "organization1",
-    "token": "${env:AMAX_SERVER_SOLACE_CLOUD_TOKEN}",
+    "token": "${env:AMAX_SOLACE_CLOUD_TOKEN}",
     "admin": {
       "username": "${env:AMAX_SERVER_CONNECTOR_USERNAME}",
       "password": "${env:AMAX_SERVER_CONNECTOR_PASSWORD}"

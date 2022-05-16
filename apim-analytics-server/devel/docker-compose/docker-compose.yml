@@ -1,11 +1,14 @@
 services:
-  apim-connector-mongodb:
+  mongodb:
     image: mongo:latest
+    ports:
+      - ${AMAX_SERVER_MONGODB_PORT:-27017}:27017
     volumes:
-      - apim-connector-mongodb-data:/data/db
+      - mongodb-data:/data/db
     restart: unless-stopped
     profiles:
       - standard
+      - prometheus-grafana
   apim-connector:
     image: solaceiotteam/apim-connector-server:latest
     ports:
@@ -17,7 +20,7 @@ services:
       - ./docker-volumes/apim-connector:/data
     restart: unless-stopped
     environment:
-      - DB_URL=mongodb://apim-connector-mongodb:27017/platform?retryWrites=true&w=majority
+      - DB_URL=mongodb://mongodb:27017/platform?retryWrites=true&w=majority
       - LOG_LEVEL=debug
       - APP_ID=apim-connector-server
       - FILE_USER_REGISTRY=/data/user-registry.json
@@ -34,7 +37,7 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      - apim-connector-mongodb
+      - mongodb
     profiles:
       - standard
   prometheus:
@@ -63,4 +66,4 @@ services:
       - standard
       - prometheus-grafana
 volumes:
-  apim-connector-mongodb-data:
+  mongodb-data:
