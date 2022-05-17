@@ -65,17 +65,14 @@ Installation Procedure
 
 2. Update the **.env** file.
 
-   a) Change the values of the following variables:
+   a) If you want to use the **standard** profile:
 
-     * ``AMAX_SERVER_USERNAME``
-     * ``AMAX_SERVER_PASSWORD``
-     * ``AMAX_SERVER_CONNECTOR_USERNAME``
-     * ``AMAX_SERVER_CONNECTOR_PASSWORD``
+     * Change the value of ``AMAX_SERVER_CONNECTOR_HOST`` to the hostname of the API Management Connector server.
+     * Change the value of ``AMAX_SERVER_CONNECTOR_PORT`` to the port of the API Management Connector server.
+     * Change the value of ``AMAX_SERVER_CONNECTOR_USERNAME`` to the username of the API Management Connector server platform and ORG administrator.
+     * Change the value of ``AMAX_SERVER_CONNECTOR_PASSWORD`` to the password of the API Management Connector server platform and ORG administrator.
 
-   b) If you want to use the **standard** profile, replace the value of ``AMAX_ORGANIZATIONS`` with
-      a comma-separated list of organizations for which you want to enable analytics.
-
-   c) If you want to use the **all-in-one** profile:
+   b) If you want to use the **all-in-one** profile:
 
      * Replace ``{solace-cloud-token}`` with the API token for Solace's Cloud REST API.
      * Replace ``{solace-service-id}`` with the ID of the Solace Cloud service you want to use.

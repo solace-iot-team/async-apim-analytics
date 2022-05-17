@@ -60,10 +60,5 @@ echo ">>> Success"
 
 "$scriptDir/internal/wait-for-analytics-server.sh"
 
-echo ">>> Enable analytics ..."
-"$scriptDir/internal/enable-analytics.sh"
-if [[ $? != 0 ]]; then echo ">>> ERROR: enable-analytics failed"; exit 1; fi
-echo ">>> Success"
-
 ###
 # End

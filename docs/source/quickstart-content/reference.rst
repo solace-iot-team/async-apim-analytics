@@ -20,11 +20,11 @@ after API Management Analytics has been installed, the changes won't become acti
 
 :AMAX_SERVER_USERNAME:
 
-  The username of the API Management Analytics server administrator. If not set, the metrics endpoint is unsecured.
+  The username of the API Management Analytics server administrator.
 
 :AMAX_SERVER_PASSWORD:
 
-  The password of the API Management Analytics server administrator. If not set, the metrics endpoint is unsecured.
+  The password of the API Management Analytics server administrator.
 
 :AMAX_SERVER_LOGGER_LOG_LEVEL:
 
@@ -49,11 +49,6 @@ after API Management Analytics has been installed, the changes won't become acti
 :AMAX_GRAFANA_PORT:
 
   The port of Grafana. The default is **8084**.
-
-:AMAX_ORGANIZATIONS:
-
-  A comma-separated list of organizations for which analytics should be enabled when the analytics server is
-  bootstrapped.
 
 :AMAX_SOLACE_CLOUD_TOKEN:
 
