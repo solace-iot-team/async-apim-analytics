@@ -111,7 +111,7 @@ npm run start:watch
 To enable analytics for organization 'organization1':
 
 ```bash
-curl -X POST -u admin:Solace123! http://localhost:8088/v1/organizations -d '{"name":"organization1","enabled":true}'
+curl -X POST -u admin:Solace123! -H 'Content-Type:application/json' http://localhost:8088/v1/organizations -d '{"name":"organization1","enabled":true}'
 ```
 
 > Note: If you changed username, password or port for the analytics server in the **.env** file, you need to adjust
