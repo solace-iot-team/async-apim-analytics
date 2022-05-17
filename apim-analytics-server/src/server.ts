@@ -68,6 +68,8 @@ app.use(express.urlencoded({ extended: true, limit: requestSizeLimit }));
 app.use(express.static(`${root}/public`));
 
 const apiSpec = path.join(__dirname + '/common/api.yml');
+app.use('/v1/spec', express.static(apiSpec));
+
 app.use(
   OpenApiValidator.middleware({
     apiSpec,
