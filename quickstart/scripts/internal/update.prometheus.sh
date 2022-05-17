@@ -18,9 +18,9 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
     - targets: ["localhost:9090"]
-  - job_name: "apim-analytics-server"
+  - job_name: "apim-analytics"
     static_configs:
-    - targets: ["apim-analytics-server:3000"]
+    - targets: ["apim-analytics:3000"]
     metrics_path: "/v1/metrics"
     basic_auth:
       username: "$AMAX_SERVER_USERNAME"

@@ -14,7 +14,7 @@ resourcesDir="$scriptDir/../resources"
 dockerProjectName="amax-qs"
 dockerComposeFile="$scriptDir/../docker-compose/docker-compose.yml"
 
-standardServices="apim-analytics-server prometheus grafana"
+standardServices="apim-analytics prometheus grafana"
 
 ############################################################################################################################
 # Prepare
