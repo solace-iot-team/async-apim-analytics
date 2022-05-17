@@ -3,10 +3,8 @@
 Administering
 =============
 
-The API Management Analytics Server provides a REST API for server administration. The REST API is documented using
-OpenAPI and is available at http://localhost:8088/api-explorer/.
-
-> Note: If you changed the port of the API Management Analytics server, you must adjust the URL.
+The API Management Analytics Server provides a REST API for server administration. The REST API is documented
+using OpenAPI and is available as public resource on the server.
 
 Enabling Analytics
 ++++++++++++++++++
