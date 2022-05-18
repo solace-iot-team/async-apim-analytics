@@ -34,7 +34,8 @@ const waitUntilConnectorIsAvailable = async (): Promise<void> => {
     }, () => { return false; });
   }
 
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
+    setTimeout(() => reject('failed to connect to server within 60 seconds'), 60000);
     while (!(await checkServer())) {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
