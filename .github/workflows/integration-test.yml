@@ -70,7 +70,7 @@ jobs:
 
       - name: Execute tests
         run: |
-          export AMAX_SERVER_SOLACE_CLOUD_TOKEN=${{ secrets.SOLACE_CLOUD_TOKEN }}
+          export AMAX_SOLACE_CLOUD_TOKEN=${{ secrets.SOLACE_CLOUD_TOKEN }}
           $TEST_DIRECTORY/integration/run.sh
 
       - name: Archive logs
