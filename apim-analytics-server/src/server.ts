@@ -1,4 +1,4 @@
-import path, { resolve } from 'path';
+import path from 'path';
 import http from 'http';
 import net from 'net';
 import { URL } from 'url';

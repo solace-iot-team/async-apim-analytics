@@ -5,14 +5,13 @@ import {
   AdministrationService,
   CloudToken,
   OpenAPI,
-  Organization,
 } from '@solace-iot-team/apim-connector-openapi-node';
 
 interface NamedItem {
   name: string;
 }
 
-const endpointCache: Map<String, Endpoint> = new Map<String, Endpoint>();
+const endpointCache: Map<string, Endpoint> = new Map<string, Endpoint>();
 
 /**
  * Returns the Solace PubSub+ cloud endpoint for an organization.
