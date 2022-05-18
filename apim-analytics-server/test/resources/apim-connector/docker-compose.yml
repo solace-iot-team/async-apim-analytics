@@ -9,7 +9,7 @@ services:
   apim-connector:
     image: solaceiotteam/apim-connector-server:latest
     ports:
-      - ${AMAX_SERVER_CONNECTOR_PORT:-8088}:3000
+      - ${AMAX_SERVER_CONNECTOR_PORT:-8092}:3000
     volumes:
       - ./docker-volumes/apim-connector:/data
     restart: unless-stopped

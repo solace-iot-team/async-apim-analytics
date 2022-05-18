@@ -36,7 +36,13 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && github.actor != 'NilsEckertSolace' && github.actor != 'ricardojosegomezulmke' && github.actor != '195858'
         uses: andymckay/cancel-action@0.2
 
-      - name: Checkout code
+      - name: Checkout OpenAPI code generator
+        uses: actions/checkout@v2
+        with:
+          repository: solace-iot-team/openapi-typescript-codegen
+          path: openapi-typescript-codegen
+
+      - name: Checkout API Management Analytics code
         uses: actions/checkout@v2
         with:
           path: async-apim-analytics
@@ -46,14 +52,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Build server
+      - name: Build OpenAPI code generator 
         run: |
           npm ci
           npm run build
+        working-directory: openapi-typescript-codegen
+ 
+      - name: Build API Management Analytics server
+        run: |
+          npm ci
+          npm link ../../openapi-typescript-codegen
+          npm run build
+
+      - name: Generate OpenAPI client
+        run: |
+          $TEST_DIRECTORY/generate-openapi-client.sh
 
       - name: Execute tests
         run: |
-          export AMAX_SERVER_SOLACE_CLOUD_URL=${{ secrets.SOLACE_CLOUD_URL }}
           export AMAX_SERVER_SOLACE_CLOUD_TOKEN=${{ secrets.SOLACE_CLOUD_TOKEN }}
           $TEST_DIRECTORY/integration/run.sh
 
