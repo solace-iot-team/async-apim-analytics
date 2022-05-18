@@ -31,7 +31,10 @@ const waitUntilConnectorIsAvailable = async (): Promise<void> => {
   const checkServer = async (): Promise<boolean> => {
     return fetch(`http://localhost:${serverPort}`).then((response) => {
       return (response.status == 200);
-    }, () => { return false; });
+    }, (reason) => { 
+      console.log(`error="${JSON.stringify(reason)}"`);
+      return false;
+    });
   }
 
   return new Promise(async (resolve, reject) => {
@@ -89,6 +92,9 @@ export async function mochaGlobalSetup() {
     process.exit(1);
   }
   utils.logMessage(scriptName, 'Docker containers for API Management Connector created');
+
+  // debug
+  s.exec(`docker-compose -p ${dockerProjectName} -f "${dockerCompositeFile}" ps`);
 
   utils.logMessage(scriptName, 'Wait until API Management Connector is up and running ...');
   await waitUntilConnectorIsAvailable().catch(() => {
