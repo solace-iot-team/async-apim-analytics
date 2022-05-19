@@ -1,19 +1,13 @@
 import path from 'node:path';
 import Bree from 'bree';
 import * as prometheus from 'prom-client';
-import { Logger as L } from '../../common/logger';
 import { AbstractCollector } from '../abstract-collector';
-import { Server } from '../../models/server';
-import { Developer } from '../../models/developer';
+import { Constants } from '../../common/constants';
+import { Logger as L } from '../../common/logger';
+import { Developer } from '../../model/developer';
 
 const OFFSET = 0;
 const INTERVAL = '120s';
-
-/** The metadata for the collector. */
-type CollectorMetadata = {
-  server?: Server;
-  organizations?: string[];
-}
 
 /** The events emitted by the collector. */
 interface Events {
@@ -25,50 +19,25 @@ interface Events {
  */
 export class DeveloperMetricsCollector extends AbstractCollector<Events> {
 
-  /** The metadata. */
-  #metadata: CollectorMetadata = {};
-
   /** The collected data. */
   #developers: Developer[] = [];
 
   /**
    * Constructor for a collector for developer metrics.
-   * 
-   * @param prefix
-   *              The name prefix for any metrics.
-   * @param server
-   *              The API-M connector configuration.
-   * @param organizations
-   *              The organizations for which to collect metrics.
    */
-  constructor(prefix: string, server: Server, organizations?: string[]) {
+  constructor() {
 
     super('DeveloperMetricsCollector', path.join(__dirname, '../../jobs/connector'));
 
-    this.server = server;
-    if (organizations) {
-      this.organizations = organizations;
-    }
-
-    this.#registerMetrics(prefix);
+    this.#registerMetrics(Constants.METRICS_PREFIX);
     this.#createJobs();
-  }
-
-  /** Setter for server configuration. */
-  set server(server: Server) {
-    this.#metadata.server = server;
-  }
-
-  /** Setter for organizations. */
-  set organizations(organizations: string[]) {
-    this.#metadata.organizations = organizations;
   }
 
   /**
    * Registers all metrics in the metrics registry.
    * 
    * @param namePrefix
-   *              The name prefix for any metrics.
+   *              The name prefix for the metric.
    */
   #registerMetrics(namePrefix: string): void {
     this.#createInfoMetric(namePrefix);
@@ -111,9 +80,6 @@ export class DeveloperMetricsCollector extends AbstractCollector<Events> {
       name: 'fetch-developers',
       timeout: OFFSET,
       interval: INTERVAL,
-      worker: {
-        workerData: this.#metadata,
-      }
     }
 
     this.registerJob(job);

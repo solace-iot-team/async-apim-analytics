@@ -1,15 +1,16 @@
 import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { Team } from '../../models/team';
-import { Developer } from '../../models/developer';
-import { Application } from '../../models/application';
+import config from '../../common/config';
+import { Server } from '../../model/server';
+import { Team } from '../../model/team';
+import { Developer } from '../../model/developer';
+import { Application } from '../../model/application';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
 
 /**
  * Retrieves the applications for a team.
  * 
  * @param server
- *                The server configuration.
+ *                The API Management Connector configuration.
  * @param team
  *                The team.
  * 
@@ -81,8 +82,8 @@ const getDeveloperApplications = async (server: Server, developer: Developer): P
 
   const applications: Application[] = [];
 
-  const server: Server = workerData.server;
-  if (!server) throw new Error('server configuration is not set');
+  const server: Server = config.connectorServer;
+  if (!server) throw new Error('API Management Connector is not configured');
 
   const teams: Team[] = workerData.teams || [];
   for (const team of teams) {

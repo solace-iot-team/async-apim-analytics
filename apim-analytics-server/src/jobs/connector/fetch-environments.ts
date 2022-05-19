@@ -1,21 +1,24 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { Environment } from '../../models/environment';
+import { parentPort } from 'node:worker_threads';
+import OrganizationService from '../../api/services/organizations/service';
+import config from '../../common/config';
+import { Environment } from '../../model/environment';
+import { Server } from '../../model/server';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
+import Organization = Components.Schemas.Organization;
 
 /**
  * Retrieves environment information for an organization.
  * 
  * @param server
- *                The server configuration.
- * @param organization
+ *                The API Management Connector configuration.
+ * @param organizationName
  *                The name of the organization.
  * 
  * @return The environment information.
  */
-const getEnvironments = async (server: Server, organization: string): Promise<Environment[]> => {
+const getEnvironments = async (server: Server, organizationName: string): Promise<Environment[]> => {
 
-  const url = `${server.baseUrl}/${organization}/environments`;
+  const url = `${server.baseUrl}/${organizationName}/environments`;
   const headers = createAuthorizationHeader(server);
 
   const response = await fetchData(url, headers);
@@ -26,7 +29,7 @@ const getEnvironments = async (server: Server, organization: string): Promise<En
 
   const environments: Environment[] = await Promise.all(response.map(async (item: any) => {
 
-    const url = `${server.baseUrl}/${organization}/environments/${item.name}`;
+    const url = `${server.baseUrl}/${organizationName}/environments/${item.name}`;
     const environment = await fetchData(url, headers);
 
     return {
@@ -34,7 +37,7 @@ const getEnvironments = async (server: Server, organization: string): Promise<En
       vpnName: environment.msgVpnName,
       serviceId: environment.serviceId,
       meta: {
-        organization: organization,
+        organization: organizationName,
       },
     };
 
@@ -49,13 +52,15 @@ const getEnvironments = async (server: Server, organization: string): Promise<En
 
   const environments: Environment[] = [];
 
-  const server: Server = workerData.server;
-  if (!server) throw new Error('server configuration is not set');
+  const server: Server = config.connectorServer;
+  if (!server) throw new Error('API Management Connector is not configured');
 
-  const organizations: string = workerData.organizations || [];
+  const organizations: Organization[] = await OrganizationService.all();
   for (const organization of organizations) {
-    const e = await getEnvironments(server, organization);
-    environments.push(...e);
+    if (organization.enabled) {
+      const e = await getEnvironments(server, organization.name);
+      environments.push(...e);
+    }
   }
 
   parentPort?.postMessage(environments);

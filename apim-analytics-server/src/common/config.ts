@@ -1,5 +1,7 @@
 import 'dotenv/config';
-import { Server } from '../models/server';
+import { Constants } from './constants';
+import { Database } from '../model/database';
+import { Server } from '../model/server';
 
 // HELPER
 
@@ -37,27 +39,24 @@ export class ServerConfig {
   /** The port. */
   #port: number;
 
-  /** User for the metric endpoint (optional). */
+  /** User for the REST API (optional). */
   #user?: {
     username: string;
     password: string;
   }
 
-  /** The organizations. */
-  #organizations: string[];
+  /** The database. */
+  #database: Database;
 
-  /** The API-M connector configuration. */
+  /** The API Management connector configuration. */
   #connector: Server;
-
-  /** The Solace PubSub+ cloud configuration. */
-  #pubSubCloud: Server;
 
   /**
    * Constructor for server configuration.
    */
   constructor() {
 
-    this.#port = getEnvVarAsNumber('AMAX_SERVER_PORT', 8082);
+    this.#port = getEnvVarAsNumber('AMAX_SERVER_PORT', Constants.DEFAULT_SERVER_PORT);
 
     const serverUsername = getEnvVarAsString('AMAX_SERVER_USERNAME');
     const serverPassword = getEnvVarAsString('AMAX_SERVER_PASSWORD');
@@ -66,12 +65,16 @@ export class ServerConfig {
       this.#user = { username: serverUsername, password: serverPassword };
     }
 
-    this.#organizations = getMandatoryEnvVarAsString('AMAX_SERVER_ORGANIZATIONS').split(',');
+    // initialize configuration for database
+
+    this.#database = {
+      url: getMandatoryEnvVarAsString('AMAX_SERVER_MONGODB_URL'),
+    };
 
     // initialze configuration for API-M connector
 
-    const connectorHost = getEnvVarAsString('AMAX_SERVER_CONNECTOR_HOST', 'localhost');
-    const connectorPort = getEnvVarAsNumber('AMAX_SERVER_CONNECTOR_PORT', 8088);
+    const connectorHost = getEnvVarAsString('AMAX_SERVER_CONNECTOR_HOST', Constants.DEFAULT_CONNECTOR_HOST);
+    const connectorPort = getEnvVarAsNumber('AMAX_SERVER_CONNECTOR_PORT', Constants.DEFAULT_CONNECTOR_PORT);
 
     const connectorUsername = getEnvVarAsString('AMAX_SERVER_CONNECTOR_USERNAME');
     const connectorPassword = getEnvVarAsString('AMAX_SERVER_CONNECTOR_PASSWORD');
@@ -94,13 +97,6 @@ export class ServerConfig {
       password: connectorPassword,
       token: connectorToken
     };
-
-    // initialize configuration for PubSub+ cloud
-
-    this.#pubSubCloud = {
-      baseUrl: getEnvVarAsString('AMAX_SERVER_SOLACE_CLOUD_URL', 'https://api.solace.cloud/api/v0'),
-      token: getMandatoryEnvVarAsString('AMAX_SERVER_SOLACE_CLOUD_TOKEN'),
-    };
   }
 
   get serverPort(): number {
@@ -111,16 +107,12 @@ export class ServerConfig {
     return this.#user;
   }
 
-  get organizations(): string[] {
-    return this.#organizations;
+  get database(): Database {
+    return this.#database;
   }
 
   get connectorServer(): Server {
     return this.#connector;
-  }
-
-  get pubSubCloudServer(): Server {
-    return this.#pubSubCloud;
   }
 
   asLogData(): any {
@@ -130,17 +122,15 @@ export class ServerConfig {
         username: this.#user.username,
         password: '***'
       } : undefined,
+      database: {
+        url: this.#database.url,
+      },
       connector: {
         baseUrl: this.#connector.baseUrl,
         username: this.#connector.username,
         password: this.#connector.password ? '***' : undefined,
         token: this.#connector.token ? '***' : undefined,
       },
-      pubSubCloud: {
-        baseUrl: this.#pubSubCloud.baseUrl,
-        token: '***'
-      },
-      organizations: this.#organizations,
     }
   }
 

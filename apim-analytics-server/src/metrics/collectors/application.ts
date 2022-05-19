@@ -3,18 +3,16 @@ import Bree from 'bree';
 import * as prometheus from 'prom-client';
 import { Logger as L } from '../../common/logger';
 import { AbstractCollector } from '../abstract-collector';
-import { Server } from '../../models/server';
-import { Developer } from '../../models/developer';
-import { Team } from '../../models/team';
-import { Application } from '../../models/application';
+import { Constants } from '../../common/constants';
+import { Developer } from '../../model/developer';
+import { Team } from '../../model/team';
+import { Application } from '../../model/application';
 
 const OFFSET = '15s';
 const INTERVAL = '60s';
 
 /** The metadata for the collector. */
 type CollectorMetadata = {
-  server?: Server;
-  organizations?: string[];
   teams?: Team[];
   developers?: Developer[];
 }
@@ -38,20 +36,15 @@ export class ApplicationMetricsCollector extends AbstractCollector<Events> {
   /**
    * Constructor for a collector for application metrics.
    * 
-   * @param namePrefix
-   *              The name prefix for any metrics.
-   * @param server
-   *              The server configuration for the API Management connector.
    * @param teams
    *              The teams for which to collect metrics.
    * @param developers
    *              The developers for which to collect metrics.
    */
-  constructor(namePrefix: string, server: Server, teams?: Team[], developers?: Developer[]) {
+  constructor(teams?: Team[], developers?: Developer[]) {
 
     super('ApplicationMetricsCollector', path.join(__dirname, '../../jobs/connector'));
 
-    this.server = server;
     if (teams) {
       this.teams = teams;
     }
@@ -59,13 +52,8 @@ export class ApplicationMetricsCollector extends AbstractCollector<Events> {
       this.developers = developers;
     }
 
-    this.#registerMetrics(namePrefix);
+    this.#registerMetrics(Constants.METRICS_PREFIX);
     this.#createJobs();
-  }
-
-  /** Setter for server configuration. */
-  set server(server: Server) {
-    this.#metadata.server = server;
   }
 
   /** Setter for teams metadata. */
@@ -82,7 +70,7 @@ export class ApplicationMetricsCollector extends AbstractCollector<Events> {
    * Registers all metrics in the metrics registry.
    * 
    * @param namePrefix
-   *              The name prefix for any metrics.
+   *              The name prefix for the metric.
    */
   #registerMetrics(namePrefix: string): void {
     this.#createInfoMetric(namePrefix);

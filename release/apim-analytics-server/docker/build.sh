@@ -10,6 +10,7 @@ amaxServerDir=$scriptDir/../../../apim-analytics-server
 dockerContext=$scriptDir/context
 
 buildFiles=(
+  "$amaxServerDir/public"
   "$amaxServerDir/src"
   "$amaxServerDir/build.ts"
   "$amaxServerDir/package*.json"

@@ -1,4 +1,5 @@
 import ms from 'ms';
+import { v4 as uuid } from 'uuid';
 import * as connector from './lib/connector-api';
 import * as solace from './lib/solace-client'
 import * as utils from './lib/utils'
@@ -8,7 +9,9 @@ import {
   Environment,
 } from './@types';
 
-/** A simple producer */
+/**
+ * A simple producer.
+ */
 class Producer {
 
   #client: solace.Publisher;
@@ -91,7 +94,9 @@ class Producer {
 
 } // class Producer 
 
-/** A simple consumer */
+/**
+ * A simple consumer.
+ */
 class Consumer {
 
   #client: solace.Subscriber;
@@ -144,35 +149,39 @@ class Consumer {
 
 } // class Consumer 
 
-/** A managed worker */
+/**
+ * A managed worker
+ */
 interface ManagedWorker {
   status: 'active' | 'inactive';
   worker?: Producer | Consumer;
   timer?: NodeJS.Timeout;
 }
 
-/** A PubSub workload simulator  */
+/**
+ * A PubSub workload simulator.
+ */
 export class WorkloadSimulator {
 
-  /** The configuration */
+  /** The configuration. */
   #configuration: Configuration;
 
-  /** The target environments */
+  /** The target environments. */
   #environments: Environment[] = [];
 
-  /** The target applications */
+  /** The target applications. */
   #applications: Application[] = [];
 
-  /** The producers */
+  /** The producers. */
   #producers: Record<string, ManagedWorker> = {};
 
-  /** The consumers */
+  /** The consumers. */
   #consumers: Record<string, ManagedWorker> = {};
 
-  /** The active timers */
+  /** The active timers. */
   #timers: NodeJS.Timer[] = [];
 
-  /** Hidden constructor */
+  /** hidden constructor */
   private constructor(configuration: Configuration) {
     this.#configuration = configuration;
   }
@@ -228,14 +237,14 @@ export class WorkloadSimulator {
     manager.#applications = applications;
 
     for (let i = 0; i < configuration.producers.count; i++) {
-      const name = '#smf/producer/' + String(i + 1).padStart(4, '0');
+      const name = '#smf/producer/' + uuid();
       manager.#producers[name] = {
         status: 'inactive',
       };
     }
 
     for (let i = 0; i < configuration.consumers.count; i++) {
-      const name = '#smf/consumer/' + String(i + 1).padStart(4, '0');
+      const name = '#smf/consumer/' + uuid();
       manager.#consumers[name] = {
         status: 'inactive',
       }

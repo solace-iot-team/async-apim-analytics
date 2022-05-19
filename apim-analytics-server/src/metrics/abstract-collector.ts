@@ -53,10 +53,12 @@ export abstract class AbstractCollector<L extends ListenerSignature<L> = Events>
         info(message: string, meta: any) {
           L.info(`${typeName}.scheduler`, message.replace(/"/g, "'"), meta);
         },
-        warn(message: string, meta: any) {
+        warn(data: string | Error, meta: any) {
+          const message = (data instanceof Error ? data.message : data);
           L.warn(`${typeName}.scheduler`, message.replace(/"/g, "'"), meta);
         },
-        error(message: string, meta: any) {
+        error(data: string | Error, meta: any) {
+          const message = (data instanceof Error ? data.message : data);
           L.error(`${typeName}.scheduler`, message.replace(/"/g, "'"), meta);
         }
       },

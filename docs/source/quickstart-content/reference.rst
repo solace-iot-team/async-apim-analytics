@@ -16,23 +16,19 @@ after API Management Analytics has been installed, the changes won't become acti
 
 :AMAX_SERVER_PORT:
 
-  The port of the API Management Analytics server. The default is **8080**.
+  The port of the API Management Analytics server. The default is **8088**.
 
 :AMAX_SERVER_USERNAME:
 
-  The username of the API Management Analytics server administrator. If not set, the metrics endpoint is unsecured.
+  The username of the API Management Analytics server administrator.
 
 :AMAX_SERVER_PASSWORD:
 
-  The password of the API Management Analytics server administrator. If not set, the metrics endpoint is unsecured.
+  The password of the API Management Analytics server administrator.
 
 :AMAX_SERVER_LOGGER_LOG_LEVEL:
 
   The log level of the API Management Analytics server. The default is **debug**.
-
-:AMAX_SERVER_ORGANIZATIONS:
-
-  The comma-separared list of organizations for which to create statistics.
 
 :AMAX_CONNECTOR_HOST:
 
@@ -40,7 +36,7 @@ after API Management Analytics has been installed, the changes won't become acti
 
 :AMAX_CONNECTOR_PORT:
 
-  The port of the API Management Connector server. The default is **8081**.
+  The port of the API Management Connector server. The default is **8082**.
 
 :AMAX_CONNECTOR_USERNAME:
 
@@ -50,22 +46,19 @@ after API Management Analytics has been installed, the changes won't become acti
 
   The password of the API Management Connector server platform and ORG administrator.
 
-:AMAX_SOLACE_CLOUD_URL:
+:AMAX_GRAFANA_PORT:
 
-  The Base URL of Solace's Cloud REST API. The default is **https://api.solace.cloud/api/v0**.
+  The port of Grafana. The default is **8084**.
 
 :AMAX_SOLACE_CLOUD_TOKEN:
 
-  The API token for Solace's Cloud REST API.
+  The API token for Solace's Cloud REST API to use in the API Management Connector. This environment variable
+  is required only when API Management Analytics is installed using the **all-in-one** installation profile.
 
 :AMAX_SOLACE_SERVICE_ID:
 
   The service ID of the Solace Cloud service to use in the API Management Connector. This environment variable
   is required only when API Management Analytics is installed using the **all-in-one** installation profile.
-
-:AMAX_GRAFANA_PORT:
-
-  The port of Grafana. The default is **8084**.
 
 
 Services
@@ -77,9 +70,9 @@ composed of the following services:
 ======================== =================================== =====================
 Name                     Description                         Installation Profile
 ======================== =================================== =====================
-apim-connector-mongodb   API Management Connector database   all-in-one
+mongodb                  MongoDB                             all-in-one, standard
 apim-connector           API Management Connector server     all-in-one
-apim-analytics-server    API Management Analytics server     all-in-one, standard
+apim-analytics           API Management Analytics server     all-in-one, standard
 prometheus               Prometheus                          all-in-one, standard
 grafana                  Grafana                             all-in-one, standard
 ======================== =================================== =====================
@@ -90,9 +83,9 @@ Ports
 
 By default, the API Management Analytics application exposes the following ports:
 
-- **8080**: API Management Analytics server
-- **8081**: API Management Connector server (only exposed when the **all-in-one** installation profile is used)
+- **8082**: API Management Connector server (exposed only when the **all-in-one** installation profile is used)
 - **8084**: Grafana
+- **8088**: API Management Analytics server
 
 .. note::
 

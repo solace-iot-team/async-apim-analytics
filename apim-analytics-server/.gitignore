@@ -3,4 +3,5 @@
 dist
 node_modules
 public/*about.json
+test/lib/generated
 tmp

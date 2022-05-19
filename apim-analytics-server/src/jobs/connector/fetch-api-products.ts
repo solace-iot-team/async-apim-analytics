@@ -1,13 +1,16 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { ApiProduct } from '../../models/api-product';
+import { parentPort } from 'node:worker_threads';
+import config from '../../common/config';
+import OrganizationService from '../../api/services/organizations/service';
+import { Server } from '../../model/server';
+import { ApiProduct } from '../../model/api-product';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
+import Organization = Components.Schemas.Organization;
 
 /**
  * Retrieves all API products for an organization.
  * 
  * @param server
- *                The server configuration.
+ *                The API Management Connector configuration.
  * @param organization
  *                The name of the organization.
  * 
@@ -36,13 +39,15 @@ const getApiProducts = async (server: Server, organization: string): Promise<Api
 
   const apiProducts: ApiProduct[] = [];
 
-  const server: Server = workerData.server;
-  if (!server) throw new Error('server configuration is not set');
+  const server: Server = config.connectorServer;
+  if (!server) throw new Error('API Management Connector is not configured');
 
-  const organizations: string = workerData.organizations || [];
+  const organizations: Organization[] = await OrganizationService.all();
   for (const organization of organizations) {
-    const a = await getApiProducts(server, organization);
-    apiProducts.push(...a);
+    if (organization.enabled) {
+      const a = await getApiProducts(server, organization.name);
+      apiProducts.push(...a);
+    }
   }
 
   parentPort?.postMessage(apiProducts);

@@ -1,13 +1,16 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import { Server } from '../../models/server';
-import { Developer } from '../../models/developer';
+import { parentPort } from 'node:worker_threads';
+import config from '../../common/config';
+import OrganizationService from '../../api/services/organizations/service';
+import { Developer } from '../../model/developer';
+import { Server } from '../../model/server';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
+import Organization = Components.Schemas.Organization;
 
 /**
  * Retrieves the developers for an organization.
  * 
  * @param server
- *                The server configuration.
+ *                The API Management Connector configuration.
  * @param organization
  *                The name of the organization.
  * 
@@ -38,13 +41,15 @@ const getDevelopers = async (server: Server, organization: string): Promise<Deve
 
   const developers: Developer[] = [];
 
-  const server: Server = workerData.server;
-  if (!server) throw new Error('server configuration is not set');
+  const server: Server = config.connectorServer;
+  if (!server) throw new Error('API Management Connector is not configured');
 
-  const organizations: string = workerData.organizations || [];
+  const organizations: Organization[] = await OrganizationService.all();
   for (const organization of organizations) {
-    const d = await getDevelopers(server, organization);
-    developers.push(...d);
+    if (organization.enabled) {
+      const d = await getDevelopers(server, organization.name);
+      developers.push(...d);
+    }
   }
 
   parentPort?.postMessage(developers);

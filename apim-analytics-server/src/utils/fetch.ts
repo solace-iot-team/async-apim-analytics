@@ -1,7 +1,6 @@
 import fetch, { HeaderInit } from 'node-fetch';
-
-import { Server } from '../models/server';
-import { Endpoint } from '../models/endpoint';
+import { Server } from '../model/server';
+import { Endpoint } from '../model/endpoint';
 
 /**
  * Creates the authorization header for a server.

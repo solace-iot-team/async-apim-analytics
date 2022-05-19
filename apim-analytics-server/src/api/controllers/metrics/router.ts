@@ -1,6 +1,6 @@
 import express from 'express';
-import MetricsController from './controller';
+import controller from './controller';
 
 export default express
   .Router()
-  .get('/', MetricsController.all);
+  .get('/', controller.all);

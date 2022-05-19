@@ -41,7 +41,7 @@ vi .env
 
 ### Install and Setup of API Management Connector, Prometheus and Grafana
 
-To create a multi-container Docker application with API Management Connector, Prometheus and Grafana:
+To create a multi-container Docker application with MongoDB, API Management Connector, Prometheus and Grafana:
 
 ```bash
 cd <SERVER_DEVEL_HOME>
@@ -51,7 +51,7 @@ cd <SERVER_DEVEL_HOME>
 > The API Management Connector is created with two organizations (organization1, organization2), each with a pre-defined setup
 > of resources (the resources definition files are located in the `<SERVER_DEVEL_HOME>/resources/apim-connector/` directory).
 
-To create a multi-container Docker application with Prometheus and Grafana (but no API Management Connector):
+To create a multi-container Docker application with MongoDB, Prometheus and Grafana (but no API Management Connector):
 
 ```bash
 cd <SERVER_DEVEL_HOME>
@@ -106,6 +106,17 @@ cd <SERVER_DEVEL_HOME>
 npm run start:watch
 ```
 
+### Enable Analytics for an Organization
+
+To enable analytics for organization 'organization1':
+
+```bash
+curl -X POST -u admin:Solace123! -H 'Content-Type:application/json' http://localhost:8088/v1/organizations -d '{"name":"organization1","enabled":true}'
+```
+
+> Note: If you changed username, password or port for the analytics server in the **.env** file, you need to adjust
+>       the corresponding values in the **curl** command.
+
 ### Simulate Workload
 
 If you use the the API Management Connector with the pre-defined setup, you can simulate workload on applications in organization1:
@@ -122,6 +133,8 @@ To view application or client statistics, open Grafana via http://localhost:8084
 
 - AsyncAPI Analytics: Application Statistics
 - AsyncAPI Analytics: Client Statistics
+
+> Note: If you changed the port for Grafana in the **.env** file, you need to adjust the URL.
 
 > Note: The default username/password for Grafana are **admin**/**admin**. When you login for the first time, you will be
 >       asked to change the default password.
