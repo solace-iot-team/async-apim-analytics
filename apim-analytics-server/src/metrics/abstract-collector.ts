@@ -101,8 +101,8 @@ export abstract class AbstractCollector<L extends ListenerSignature<L> = Events>
   }
 
   /** Stops metrics collection. */
-  disable(): void {
-    this.#scheduler.stop();
+  async disable(): Promise<void> {
+    await this.#scheduler.stop();
   }
 
   /**
@@ -135,4 +135,4 @@ export abstract class AbstractCollector<L extends ListenerSignature<L> = Events>
     this.#workerMessageHandlers.push(handler);
   }
 
-} // abstract class AbstractMetricsCollector<L extends ListenerSignature<L> = CollectorEvents>
+} // class AbstractMetricsCollector<L extends ListenerSignature<L> = CollectorEvents>
