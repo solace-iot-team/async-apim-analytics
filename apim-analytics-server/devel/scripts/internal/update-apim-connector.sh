@@ -3,25 +3,17 @@
 scriptDir=$(cd $(dirname "$0") && pwd);
 
 ############################################################################################################################
-# Settings
+# Prepare
 
-envFile="$scriptDir/../../.env"
-
-############################################################################################################################
-# Helper
-
-function getenv {
-  result=$(grep "${1}" "$envFile" -s | cut -f 2 -d '=')
-  echo ${result:-$2}
-}
+export $(grep -v '^#' "$scriptDir/../../.env" | xargs -0)
 
 ############################################################################################################################
 # Run
 
 cat <<EOF > "$scriptDir/../../docker-compose/docker-volumes/apim-connector/user-registry.json"
 {
-  "$(getenv AMAX_SERVER_CONNECTOR_USERNAME)": {
-    "password": "$(getenv AMAX_SERVER_CONNECTOR_PASSWORD)",
+  "$AMAX_SERVER_CONNECTOR_USERNAME": {
+    "password": "$AMAX_SERVER_CONNECTOR_PASSWORD",
     "roles": ["platform-admin","org-admin"]
   }
 }

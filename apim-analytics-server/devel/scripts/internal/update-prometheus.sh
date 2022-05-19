@@ -3,17 +3,9 @@
 scriptDir=$(cd $(dirname "$0") && pwd);
 
 ############################################################################################################################
-# Settings
+# Prepare
 
-envFile="$scriptDir/../../.env"
-
-############################################################################################################################
-# Helper
-
-function getenv {
-  result=$(grep "${1}" "$envFile" -s | cut -f 2 -d '=')
-  echo ${result:-$2}
-}
+export $(grep -v '^#' "$scriptDir/../../.env" | xargs -0)
 
 ############################################################################################################################
 # Run
@@ -28,11 +20,11 @@ scrape_configs:
     - targets: ["localhost:9090"]
   - job_name: "apim-analytics-server"
     static_configs:
-    - targets: ["host.docker.internal:$(getenv AMAX_SERVER_PORT 8080)"]
+    - targets: ["host.docker.internal:${AMAX_SERVER_PORT:-8088}"]
     metrics_path: "/v1/metrics"
     basic_auth:
-      username: "$(getenv AMAX_SERVER_USERNAME)"
-      password: "$(getenv AMAX_SERVER_PASSWORD)"
+      username: "$AMAX_SERVER_USERNAME"
+      password: "$AMAX_SERVER_PASSWORD"
 EOF
 
 ####

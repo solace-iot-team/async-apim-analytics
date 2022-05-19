@@ -10,7 +10,7 @@ services:
       - standard
       - prometheus-grafana
   apim-connector:
-    image: solaceiotteam/apim-connector-server:latest
+    image: solaceiotteam/apim-connector-server:0.3.8
     ports:
       - ${AMAX_SERVER_CONNECTOR_PORT:-8082}:3000
     healthcheck:
@@ -51,7 +51,7 @@ services:
       - standard
       - prometheus-grafana
   grafana:
-    image: grafana/grafana-oss:latest
+    image: grafana/grafana-oss:8.5.2
     ports:
       - ${AMAX_GRAFANA_PORT:-8084}:3000
     volumes:

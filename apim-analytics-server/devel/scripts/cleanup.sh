@@ -18,33 +18,40 @@ dockerComposeFile="$scriptDir/../docker-compose/docker-compose.yml"
 # Prepare
 
 # update file-based configuration
-"$scriptDir/internal/update.apim-connector.sh"
+"$scriptDir/internal/update-apim-connector.sh"
+
+# set environment variables for Docker Compose CLI
+export COMPOSE_PROJECT_NAME=$dockerProjectName
+export COMPOSE_FILE=$dockerComposeFile
+
+# set environment variables for analytics tools
+export DOTENV_CONFIG_PATH=$envFile
 
 ############################################################################################################################
 # Run
 
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" ps | grep --silent apim-connector
+docker-compose ps | grep --silent apim-connector
 if [[ $? == 0 ]]; then
 
   echo ">>> Starting API Management Connector ..."
-  docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d apim-connector
-  if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
+  docker-compose --env-file="$envFile" up -d apim-connector
+  if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose up failed"; exit 1; fi
   echo ">>> Success"
 
   "$scriptDir/internal/wait-for-apim-connector.sh"
 
   echo ">>> Cleaning up API Management Connector ..."
-  DOTENV_CONFIG_PATH="$envFile" npm --silent --prefix "$toolsDir" run configure-connector delete "$resourcesDir/apim-connector/organization1.json"
+  npm --silent --prefix "$toolsDir" run configure-connector delete "$resourcesDir/apim-connector/organization1.json"
   if [[ $? != 0 ]]; then echo ">>> ERROR: configure-connector delete failed"; exit 1; fi
-  DOTENV_CONFIG_PATH="$envFile" npm --silent --prefix "$toolsDir" run configure-connector delete "$resourcesDir/apim-connector/organization2.json"
+  npm --silent --prefix "$toolsDir" run configure-connector delete "$resourcesDir/apim-connector/organization2.json"
   if [[ $? != 0 ]]; then echo ">>> ERROR: configure-connector delete failed"; exit 1; fi
   echo ">>> Success"
 
 fi
 
 echo ">>> Deleting services for API Management Analytics development ..."
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" down --volumes
-if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose down failed"; exit 1; fi
+docker-compose --env-file="$envFile" down --volumes
+if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose down failed"; exit 1; fi
 echo ">>> Success"
 
 ###

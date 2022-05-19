@@ -14,34 +14,41 @@ resourcesDir="$scriptDir/../resources"
 dockerProjectName="amax-qs"
 dockerComposeFile="$scriptDir/../docker-compose/docker-compose.yml"
 
-standardServices="apim-analytics prometheus grafana"
-
 ############################################################################################################################
 # Prepare
 
 # update file-based configuration
-"$scriptDir/internal/update.apim-connector.sh"
-"$scriptDir/internal/update.prometheus.sh"
+"$scriptDir/internal/update-apim-connector.sh"
+"$scriptDir/internal/update-prometheus.sh"
+
+# set environment variables for Docker Compose CLI
+export COMPOSE_PROJECT_NAME=$dockerProjectName
+export COMPOSE_FILE=$dockerComposeFile
+
+# set environment variables for analytics tools
+export DOTENV_CONFIG_PATH=$envFile
 
 ############################################################################################################################
 # Run
 
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" ps | grep --silent apim-connector
+docker-compose ps | grep --silent apim-connector
 if [[ $? == 0 ]]; then
 
   echo ">>> Starting API Management Connector ..."
-  docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d apim-connector
-  if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
+  docker-compose --env-file="$envFile" up -d apim-connector
+  if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose up failed"; exit 1; fi
   echo ">>> Success"
 
   "$scriptDir/internal/wait-for-apim-connector.sh"
 
 fi
 
-echo ">>> Starting standard services for API Management Analytics quickstart ..."
-docker-compose -p $dockerProjectName -f "$dockerComposeFile" --env-file="$envFile" up -d $standardServices
-if [[ $? != 0 ]]; then echo ">>> ERROR: docker compose up failed"; exit 1; fi
+echo ">>> Starting services for API Management Analytics quickstart ..."
+docker-compose --env-file="$envFile" up -d apim-analytics prometheus grafana
+if [[ $? != 0 ]]; then echo ">>> ERROR: docker-compose up failed"; exit 1; fi
 echo ">>> Success"
+
+"$scriptDir/internal/wait-for-analytics-server.sh"
 
 ###
 # End
