@@ -61,7 +61,7 @@ const getQueues = async (server: Server, environment: Environment, applications:
   const endpoint = await getSempV2MonitorEndpoint(server, environment.meta.organization, environment.serviceId);
   const headers = createAuthorizationHeader(endpoint);
 
-  const vpnName = environment.vpnName;
+  const vpnName = environment.msgVpnName;
 
   let nextPageUri = `${endpoint.uri}/msgVpns/${vpnName}/queues?count=100&where=owner!=""&select=${queueProperties.join(',')}`;
   while (nextPageUri) {

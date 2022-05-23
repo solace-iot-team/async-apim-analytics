@@ -39,7 +39,7 @@ const getRestDeliveryPoints = async (server: Server, environment: Environment, a
   const endpoint = await getSempV2MonitorEndpoint(server, environment.meta.organization, environment.serviceId);
   const headers = createAuthorizationHeader(endpoint);
 
-  const vpnName = environment.vpnName;
+  const vpnName = environment.msgVpnName;
 
   let nextPageUri = `${endpoint.uri}/msgVpns/${vpnName}/clients?count=100&select=${clientProperties.join(',')}`;
   while (nextPageUri) {
