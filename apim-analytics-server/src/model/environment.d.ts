@@ -1,7 +1,8 @@
 export type Environment = {
   name: string;
-  vpnName: string;
+  msgVpnName: string;
   serviceId: string;
+  datacenterId: string;
   meta: Environment.Meta;
 }
 
