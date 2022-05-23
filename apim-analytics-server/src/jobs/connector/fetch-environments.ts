@@ -34,8 +34,9 @@ const getEnvironments = async (server: Server, organizationName: string): Promis
 
     return {
       name: environment.name,
-      vpnName: environment.msgVpnName,
+      msgVpnName: environment.msgVpnName,
       serviceId: environment.serviceId,
+      datacenterId: environment.datacenterId,
       meta: {
         organization: organizationName,
       },

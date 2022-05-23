@@ -51,14 +51,14 @@ export class EnvironmentMetricsCollector extends AbstractCollector<CollectorEven
    */
   #createInfoMetric(namePrefix: string): void {
 
-    const allLabelNames = ['organization', 'environment'] as const;
+    const allLabelNames = ['organization', 'environment', 'datacenter_id'] as const;
     type Label = typeof allLabelNames[number];
 
     const environments = this.#environments;
     async function collect(this: prometheus.Gauge<Label>): Promise<void> {
       this.reset();
       environments.forEach((environment: Environment) => {
-        this.set({ ...environment.meta, environment: environment.name }, 1);
+        this.set({ ...environment.meta, environment: environment.name, datacenter_id: environment.datacenterId }, 1);
       });
     }
 
