@@ -6,6 +6,20 @@ import { Developer } from '../../model/developer';
 import { Application } from '../../model/application';
 import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
 
+const apiProductsToString = (apiProducts: any[]): string[] => {
+
+  let result: string[] = [];
+  apiProducts.forEach(item => {
+    if (typeof item === 'string') {
+      result.push(item);
+    } else if (typeof item.apiproduct === 'string') {
+      result.push(item.apiproduct);
+    }
+  });
+
+  return result;
+}
+
 /**
  * Retrieves the applications for a team.
  * 
@@ -28,7 +42,7 @@ const getTeamApplications = async (server: Server, team: Team): Promise<Applicat
   const applications: Application[] = response.map((application: any) => ({
     name: application.name,
     internalName: application.internalName,
-    apiProducts: application.apiProducts,
+    apiProducts: apiProductsToString(application.apiProducts),
     credentials: {
       username: application.credentials.secret.consumerKey,
     },

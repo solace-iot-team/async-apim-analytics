@@ -1,6 +1,7 @@
 import * as prometheus from 'prom-client';
 import { AbstractCollector } from '../../../metrics/abstract-collector';
 import { EnvironmentMetricsCollector } from '../../../metrics/collectors/environment';
+import { ApiProductMetricsCollector } from '../../../metrics/collectors/api-products';
 import { TeamMetricsCollector } from '../../../metrics/collectors/team';
 import { DeveloperMetricsCollector } from '../../../metrics/collectors/developer';
 import { ApplicationMetricsCollector } from '../../../metrics/collectors/application';
@@ -21,10 +22,11 @@ class MetricsService {
 
     // Create all metrics collectors
 
-    const environmentMetricCollector = new EnvironmentMetricsCollector();
-    const teamMetricCollector = new TeamMetricsCollector();
-    const developerMetricCollector = new DeveloperMetricsCollector();
-    const applicationMetricCollector = new ApplicationMetricsCollector();
+    const environmentMetricsCollector = new EnvironmentMetricsCollector();
+    const apiProductMetricsCollector = new ApiProductMetricsCollector();
+    const teamMetricsCollector = new TeamMetricsCollector();
+    const developerMetricsCollector = new DeveloperMetricsCollector();
+    const applicationMetricsCollector = new ApplicationMetricsCollector();
     const clientMetricsCollector = new ClientMetricsCollector();
     const queueMetricsCollector = new QueueMetricsCollector();
     const restDeliveryPointMetricsCollector = new RestDeliveryPointMetricsCollector();
@@ -32,21 +34,21 @@ class MetricsService {
     // Some collectors depend on data from others.
     // Use event listeners to update the metadata for those collectors.
 
-    teamMetricCollector.on('update', teams => {
-      applicationMetricCollector.teams = teams;
+    teamMetricsCollector.on('update', teams => {
+      applicationMetricsCollector.teams = teams;
     });
 
-    developerMetricCollector.on('update', developers => {
-      applicationMetricCollector.developers = developers;
+    developerMetricsCollector.on('update', developers => {
+      applicationMetricsCollector.developers = developers;
     });
 
-    environmentMetricCollector.on('update', environments => {
+    environmentMetricsCollector.on('update', environments => {
       clientMetricsCollector.environments = environments;
       queueMetricsCollector.environments = environments;
       restDeliveryPointMetricsCollector.environments = environments;
     });
 
-    applicationMetricCollector.on('update', applications => {
+    applicationMetricsCollector.on('update', applications => {
       clientMetricsCollector.applications = applications;
       queueMetricsCollector.applications = applications;
       restDeliveryPointMetricsCollector.applications = applications;
@@ -55,10 +57,11 @@ class MetricsService {
     // Start data collection for all metrics and create a merged registry
 
     const collectors: AbstractCollector[] = [
-      environmentMetricCollector,
-      teamMetricCollector,
-      developerMetricCollector,
-      applicationMetricCollector,
+      environmentMetricsCollector,
+      apiProductMetricsCollector,
+      teamMetricsCollector,
+      developerMetricsCollector,
+      applicationMetricsCollector,
       clientMetricsCollector,
       queueMetricsCollector,
       restDeliveryPointMetricsCollector,

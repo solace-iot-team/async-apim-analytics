@@ -74,6 +74,7 @@ export class ApplicationMetricsCollector extends AbstractCollector<Events> {
    */
   #registerMetrics(namePrefix: string): void {
     this.#createInfoMetric(namePrefix);
+    this.#createApiProductInfoMetric(namePrefix);
   }
 
   /**
@@ -97,7 +98,37 @@ export class ApplicationMetricsCollector extends AbstractCollector<Events> {
 
     this.registerMetric(new prometheus.Gauge<Label>({
       name: `${namePrefix}_application_info`,
-      help: 'Application information.',
+      help: 'Information about an application.',
+      labelNames: allLabelNames,
+      collect: collect,
+      registers: [], // don't register in global registry
+    }));
+  }
+
+  /**
+   * Creates a metric for information about the registration of an application for an API product.
+   * 
+   * @param namePrefix
+   *              The name prefix for the metric.
+   */
+   #createApiProductInfoMetric(namePrefix: string): void {
+
+    const allLabelNames = ['organization', 'application', 'api_product'] as const;
+    type Label = typeof allLabelNames[number];
+
+    const applications = this.#applications;
+    async function collect(this: prometheus.Gauge<Label>): Promise<void> {
+      this.reset();
+      applications.forEach((application: Application) => {
+        application.apiProducts.forEach((apiProduct: string) => {
+          this.set({ organization: application.meta.organization, application: application.name, api_product: apiProduct }, 1);        
+        });
+      });
+    }
+
+    this.registerMetric(new prometheus.Gauge<Label>({
+      name: `${namePrefix}_application_api_product_info`,
+      help: 'Information about the registration of an application for an API product.',
       labelNames: allLabelNames,
       collect: collect,
       registers: [], // don't register in global registry
