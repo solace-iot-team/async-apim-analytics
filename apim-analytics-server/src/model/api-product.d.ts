@@ -1,4 +1,13 @@
 export type ApiProduct = {
-  organization: string;
   name: string;
+  businessGroup?: string;
+  environments: string[];
+  meta: ApiProduct.Meta;
+}
+
+export namespace ApiProduct {
+
+  export type Meta = {
+    organization: string;
+  }
 }

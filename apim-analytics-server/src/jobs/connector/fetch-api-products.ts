@@ -7,6 +7,29 @@ import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
 import Organization = Components.Schemas.Organization;
 
 /**
+ * Returns the business group of an API product.
+ * 
+ * @param apiProduct The API product.
+ * 
+ * @returns The business group of the API product.
+ */
+const getBusinessGroup = (apiProduct: any): string | undefined => {
+
+  let businessGroup: string | undefined;
+
+  const id = apiProduct.attributes.find((attribute: any) => attribute.name == '_AP_BUSINESS_GROUP_OWNING_ID_');
+  const displayName = apiProduct.attributes.find((attribute: any) => attribute.name == '_AP_BUSINESS_GROUP_OWNING_DISPLAY_NAME_');
+
+  if (displayName) {
+    businessGroup = displayName.value;
+  } else if (id) {
+    businessGroup = id.value;
+  }
+
+  return businessGroup;
+}
+
+/**
  * Retrieves all API products for an organization.
  * 
  * @param server
@@ -26,8 +49,12 @@ const getApiProducts = async (server: Server, organization: string): Promise<Api
   }
 
   const apiProducts = response.map((apiProduct: any) => ({
-    organization: organization,
-    name: apiProduct.name,
+    name: apiProduct.name as string,
+    businessGroup: getBusinessGroup(apiProduct),
+    environments: apiProduct.environments as string[],
+    meta: {
+      organization: organization,
+    }
   }));
 
   return apiProducts;
