@@ -78,7 +78,7 @@ const getDeveloperApplications = async (server: Server, developer: Developer): P
   const applications: Application[] = response.map((application: any) => ({
     name: application.name,
     internalName: application.internalName,
-    apiProducts: application.apiProducts,
+    apiProducts: apiProductsToString(application.apiProducts),
     credentials: {
       username: application.credentials.secret.consumerKey,
     },
