@@ -168,7 +168,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "short"
         },
         "overrides": []
       },
@@ -239,7 +240,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "short"
         },
         "overrides": []
       },
@@ -310,7 +312,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "short"
         },
         "overrides": []
       },
@@ -1104,8 +1107,8 @@
       {
         "current": {
           "selected": false,
-          "text": "team-a_application",
-          "value": "team-a_application"
+          "text": "team-a_application-a1",
+          "value": "team-a_application-a1"
         },
         "datasource": {
           "type": "prometheus",
@@ -1192,6 +1195,6 @@
   "timezone": "",
   "title": "AsyncAPI Analytics: Client Statistics",
   "uid": "79c717c3-a9a8-4f0e-ae11-2cf997000542",
-  "version": 12,
+  "version": 2,
   "weekStart": ""
 }
