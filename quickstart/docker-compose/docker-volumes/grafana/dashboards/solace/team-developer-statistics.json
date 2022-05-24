@@ -1,0 +1,591 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "iteration": 1653395962836,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Application"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Messages Sent"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_sent_total{organization=\"$organization\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application) * on(application) group_left(owner)\n  max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\n)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "Top3 Producer"
+        }
+      ],
+      "title": "Top 3: Producer Applications",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 3,
+              "application": 2,
+              "owner": 1
+            },
+            "renameByName": {
+              "Value": "Messages Sent",
+              "application": "Application",
+              "owner": "Team"
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "greater",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "Messages Sent"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Application"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Messages Received"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_received_total{organization=\"$organization\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application) * on(application) group_left(owner)\n  max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\n)",
+          "format": "table",
+          "instant": true,
+          "range": false,
+          "refId": "Top3 Consumer"
+        }
+      ],
+      "title": "Top 3: Consumer Applications",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 3,
+              "application": 2,
+              "owner": 1
+            },
+            "renameByName": {
+              "Value": "Messages Received",
+              "application": "Application",
+              "owner": "Team"
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "greater",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "Messages Received"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Messages .*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Data .*"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 4,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Application"
+          }
+        ]
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Messages Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Messages Received"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_discarded_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Messages Discarded"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_bytes_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Data Sent"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_bytes_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Data Received"
+        }
+      ],
+      "title": "Applications",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #Data Received": 6,
+              "Value #Data Sent": 5,
+              "Value #Messages Discarded": 4,
+              "Value #Messages Received": 3,
+              "Value #Messages Sent": 2,
+              "application": 1
+            },
+            "renameByName": {
+              "Time": "",
+              "Value #Data Received": "Data Received",
+              "Value #Data Sent": "Data Sent",
+              "Value #Messages Discarded": "Messages Discarded",
+              "Value #Messages Received": "Messages Received",
+              "Value #Messages Sent": "Messages Sent",
+              "application": "Application"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "organization1",
+          "value": "organization1"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info, organization)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Organization",
+        "multi": false,
+        "name": "organization",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info, organization)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Team or Developer",
+        "multi": false,
+        "name": "type",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "team",
+            "value": "team"
+          },
+          {
+            "selected": false,
+            "text": "developer",
+            "value": "developer"
+          }
+        ],
+        "query": "team, developer",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info{organization=\"$organization\",type=~\"$type\"}, owner)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Owner",
+        "multi": false,
+        "name": "owner",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info{organization=\"$organization\",type=~\"$type\"}, owner)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "AsyncAPI Analytics: Team & Developer Statistics",
+  "uid": "ebd0cb4c-ad21-4a2c-8a5e-d08e85b9135a",
+  "version": 1,
+  "weekStart": ""
+}
