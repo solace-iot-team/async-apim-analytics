@@ -30,6 +30,14 @@
       "uri": "../apis/say-hello.yml"
     },
     {
+      "name": "acme-humidity",
+      "uri": "../apis/acme-humidity.yml"
+    },
+    {
+      "name": "acme-temperature",
+      "uri": "../apis/acme-temperature.yml"
+    },
+    {
       "name": "administration",
       "uri": "http://localhost:${env:AMAX_SERVER_CONNECTOR_PORT}/notification-api/consumer/administration.yml"
     },
@@ -55,6 +63,20 @@
       "name": "say-hello",
       "apis": [
         "say-hello"
+      ],
+      "guaranteedMessaging": false
+    },
+    {
+      "name": "acme-humidity",
+      "apis": [
+        "acme-humidity"
+      ],
+      "guaranteedMessaging": false
+    },
+    {
+      "name": "acme-temperature",
+      "apis": [
+        "acme-temperature"
       ],
       "guaranteedMessaging": false
     },
@@ -102,7 +124,7 @@
       "type": "team",
       "owner": "team-b",
       "apiProducts": [
-        "say-hello"
+        "connector-notifications"
       ],
       "credentials": {
         "username": "organization1_application-b1",
@@ -114,12 +136,25 @@
       "type": "team",
       "owner": "team-c",
       "apiProducts": [
-        "connector-notifications"
-      ],
-      "credentials": {
-        "username": "organization1_application-c1",
-        "password": "Wednesday1404"
-      }
+        "acme-humidity"
+      ]
+    },
+    {
+      "name": "team-c_application-c2",
+      "type": "team",
+      "owner": "team-c",
+      "apiProducts": [
+        "acme-temperature"
+      ]
+    },
+    {
+      "name": "team-c_application-c3",
+      "type": "team",
+      "owner": "team-c",
+      "apiProducts": [
+        "acme-humidity",
+        "acme-temperature"
+      ]
     },
     {
       "name": "team-x_application-x1",
@@ -134,11 +169,7 @@
           "method": "POST",
           "environments": ["development"]
         }
-      ],
-      "credentials": {
-        "username": "organization1_application-x1",
-        "password": "Wednesday1404"
-      }
+      ]
     },
     {
       "name": "team-x_application-x2",
@@ -153,11 +184,7 @@
           "method": "PUT",
           "environments": ["development"]
         }
-      ],
-      "credentials": {
-        "username": "organization1_application-x2",
-        "password": "Wednesday1404"
-      }
+      ]
     }
   ]
 }

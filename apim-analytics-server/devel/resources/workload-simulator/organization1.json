@@ -17,14 +17,17 @@
     "applications": [
       "team-a_application-a1",
       "team-a_application-a2",
-      "team-b_application-b1"
+      "team-c_application-c1",
+      "team-c_application-c2",
+      "team-c_application-c3"
     ]
   },
   "consumers": {
     "count": 4,
     "lifespan": "15m",
     "applications": [
-      "team-b_application-b1",
+      "team-c_application-c1",
+      "team-c_application-c2",
       "team-x_application-x1",
       "team-x_application-x2"
     ]
