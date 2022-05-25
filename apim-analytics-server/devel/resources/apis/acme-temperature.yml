@@ -1,0 +1,41 @@
+asyncapi: "2.0.0"
+info:
+  title: "Acme Temperature Sensor API"
+  description: "This API provides temperature information"
+  version: "v1"
+  x-view: "provider"
+  x-generated-time: "2022-05-25 07:01 UTC"
+
+servers: {}
+
+channels:
+  acme/temperature/{sensor_id}:
+    parameters:
+      sensor_id:
+        schema:
+          type: string
+    subscribe:
+      message:
+        $ref: '#/components/messages/SensorData'
+    publish:
+      message:
+        $ref: '#/components/messages/SensorData'
+
+components:
+  schemas:
+    SensorData:
+      $schema: "http://json-schema.org/draft-07/schema#"
+      type: object
+      properties:
+        sensorId:
+          type: string
+          title: Sensor ID
+        temperature:
+          type: number
+          title: Temperature
+  messages:
+    SensorData:
+      payload:
+        $ref: '#/components/schemas/SensorData'
+      schemaFormat: "application/vnd.aai.asyncapi+json;version=2.0.0"
+      contentType: "application/json"
