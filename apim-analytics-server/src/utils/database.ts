@@ -22,15 +22,18 @@ export class MongoDatabase {
    */
   static async createInstance(name: string): Promise<mongodb.Db> {
 
-    if (!MongoDatabase.#client) {
-      MongoDatabase.#client = new mongodb.MongoClient(config.database.url, {
+    if (MongoDatabase.#client === undefined) {
+
+      const client = new mongodb.MongoClient(config.database.url, {
         appName: 'apim-analytics-server',
-        serverSelectionTimeoutMS: 3000,
-        connectTimeoutMS: 1000,
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
         socketTimeoutMS: 5000,
         minPoolSize: 5,
       });
-      await MongoDatabase.#client.connect();
+
+      await client.connect();
+      MongoDatabase.#client = client;
       L.info('MongoDatabase.createInstance', `Created database connection for '${config.database.url}'`);
     }
 

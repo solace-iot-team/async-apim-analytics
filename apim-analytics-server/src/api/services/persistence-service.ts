@@ -35,13 +35,13 @@ export class PersistenceService<T> {
       const info = await database.listCollections({ name: name }).toArray();
       if (info.length == 0) {
         await database.createCollection(name);
-        L.info('DatabaseServer.createInstance', `Created collection '${name}'`);
+        L.info('PersistenceService.createInstance', `Created collection '${name}'`);
         const indexName = `idx_text_${database.databaseName}_${name}`;
         await database.collection(name).createIndex({ '$**': 'text' }, { name: indexName });
-        L.info('DatabaseServer.createInstance', `Created full-text index '${indexName}'`);
+        L.info('PersistenceService.createInstance', `Created full-text index '${indexName}'`);
       }
     } catch (error: any) {
-      L.error('DatabaseServer.createInstance', error.message);
+      L.error('PersistenceService.createInstance', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
@@ -60,7 +60,7 @@ export class PersistenceService<T> {
     try {
       documents = await this.#collection.find({}).toArray();
     } catch (error: any) {
-      L.error('DatabaseServer.all', error.message);
+      L.error('PersistenceService.all', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
@@ -82,7 +82,7 @@ export class PersistenceService<T> {
     try {
       document = await this.#collection.findOne({ _id: id });
     } catch (error: any) {
-      L.error('DatabaseServer.byId', error.message);
+      L.error('PersistenceService.byId', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
@@ -114,7 +114,7 @@ export class PersistenceService<T> {
     try {
       await this.#collection.insertOne({ ...document, _id: id as any }, options)
     } catch (error: any) {
-      L.error('DatabaseServer.insert', error.message);
+      L.error('PersistenceService.insert', error.message);
       if (error.code == 11000) {
         throw new ServerError(422, 'The document ID is already used');
       }
@@ -146,7 +146,7 @@ export class PersistenceService<T> {
     try {
       updateResult = await this.#collection.updateOne({ _id: id as any }, { $set: document }, options);
     } catch (error: any) {
-      L.error('DatabaseServer.update', error.message);
+      L.error('PersistenceService.update', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
@@ -168,7 +168,7 @@ export class PersistenceService<T> {
     try {
       deleteResult = await this.#collection.deleteOne({ _id: id as any });
     } catch (error: any) {
-      L.error('DatabaseServer.delete', error.message);
+      L.error('PersistenceService.delete', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
