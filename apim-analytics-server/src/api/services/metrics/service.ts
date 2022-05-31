@@ -1,13 +1,13 @@
 import * as prometheus from 'prom-client';
-import { AbstractCollector } from '../../../metrics/abstract-collector';
-import { EnvironmentMetricsCollector } from '../../../metrics/collectors/environment';
-import { ApiProductMetricsCollector } from '../../../metrics/collectors/api-products';
-import { TeamMetricsCollector } from '../../../metrics/collectors/team';
-import { DeveloperMetricsCollector } from '../../../metrics/collectors/developer';
-import { ApplicationMetricsCollector } from '../../../metrics/collectors/application';
-import { ClientMetricsCollector } from '../../../metrics/collectors/client';
-import { QueueMetricsCollector } from '../../../metrics/collectors/queue';
-import { RestDeliveryPointMetricsCollector } from '../../../metrics/collectors/rest-delivery-point';
+import { Constants } from '../../../common/constants';
+import { collectEnvironmentMetrics } from './collections/environment-metrics';
+import { collectApiProductMetrics } from './collections/api-product-metrics';
+import { collectTeamMetrics } from './collections/team-metrics';
+import { collectDeveloperMetrics } from './collections/developer-metrics';
+import { collectApplicationMetrics } from './collections/application-metrics';
+import { collectClientMetrics } from './collections/client-metrics';
+import { collectQueueMetrics } from './collections/queue-metrics';
+import { collectRestDeliveryPointMetrics } from './collections/rest-delivery-point-metrics';
 
 /**
  * The metrics service.
@@ -15,73 +15,27 @@ import { RestDeliveryPointMetricsCollector } from '../../../metrics/collectors/r
 class MetricsService {
 
   /** The metrics registry. */
-  #registry: prometheus.Registry;
+  #registry: prometheus.Registry = new prometheus.Registry();
 
-  /** Constructor. */
   constructor() {
 
-    // Create all metrics collectors
+    const prefix = Constants.METRICS_PREFIX + '_';
+    const register = this.#registry;
 
-    const environmentMetricsCollector = new EnvironmentMetricsCollector();
-    const apiProductMetricsCollector = new ApiProductMetricsCollector();
-    const teamMetricsCollector = new TeamMetricsCollector();
-    const developerMetricsCollector = new DeveloperMetricsCollector();
-    const applicationMetricsCollector = new ApplicationMetricsCollector();
-    const clientMetricsCollector = new ClientMetricsCollector();
-    const queueMetricsCollector = new QueueMetricsCollector();
-    const restDeliveryPointMetricsCollector = new RestDeliveryPointMetricsCollector();
-
-    // Some collectors depend on data from others.
-    // Use event listeners to update the metadata for those collectors.
-
-    teamMetricsCollector.on('update', teams => {
-      applicationMetricsCollector.teams = teams;
-    });
-
-    developerMetricsCollector.on('update', developers => {
-      applicationMetricsCollector.developers = developers;
-    });
-
-    environmentMetricsCollector.on('update', environments => {
-      clientMetricsCollector.environments = environments;
-      queueMetricsCollector.environments = environments;
-      restDeliveryPointMetricsCollector.environments = environments;
-    });
-
-    applicationMetricsCollector.on('update', applications => {
-      clientMetricsCollector.applications = applications;
-      queueMetricsCollector.applications = applications;
-      restDeliveryPointMetricsCollector.applications = applications;
-    });
-
-    // Start data collection for all metrics and create a merged registry
-
-    const collectors: AbstractCollector[] = [
-      environmentMetricsCollector,
-      apiProductMetricsCollector,
-      teamMetricsCollector,
-      developerMetricsCollector,
-      applicationMetricsCollector,
-      clientMetricsCollector,
-      queueMetricsCollector,
-      restDeliveryPointMetricsCollector,
-    ];
-
-    collectors.forEach(collector => { collector.enable(); });
-
-    const registries = collectors.map(collector => collector.registry);
-    this.#registry = prometheus.Registry.merge(registries);
+    collectEnvironmentMetrics({ prefix, register });
+    collectApiProductMetrics({ prefix, register });
+    collectTeamMetrics({ prefix, register });
+    collectDeveloperMetrics({ prefix, register });
+    collectApplicationMetrics({ prefix, register });
+    collectClientMetrics({ prefix, register });
+    collectQueueMetrics({ prefix, register });
+    collectRestDeliveryPointMetrics({ prefix, register });
   }
 
-  /**
-   * Returns all metrics.
-   * 
-   * @returns The metrics.
-   */
+  /** Returns all metrics. */
   async all(): Promise<string> {
     return this.#registry.metrics();
   }
-
-} // class MetricsService
+}
 
 export default new MetricsService();

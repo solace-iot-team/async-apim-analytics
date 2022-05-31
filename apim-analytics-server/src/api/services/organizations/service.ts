@@ -1,12 +1,20 @@
+import { TypedEmitter } from 'tiny-typed-emitter';
 import { ServerError } from '../../middleware/error-handler';
 import { PersistenceService } from '../persistence-service';
 import Organization = Components.Schemas.Organization;
 import OrganizationPatch = Components.Schemas.OrganizationPatch;
 
+/** The events emitted by the organization service. */
+interface Events {
+  created: (name: string, organization: Organization) => void;
+  updated: (name: string, organization: Organization) => void;
+  deleted: (name: string) => void;
+}
+
 /**
  * The organizations service.
  */
-class OrganizationsService {
+class OrganizationsService extends TypedEmitter<Events> {
 
   /** The persistence service instance for organisations. */
   #persistenceService: PersistenceService<Organization>;
@@ -89,6 +97,7 @@ class OrganizationsService {
       throw error;
     }
 
+    this.emit('created', organization.name, organization);
     return organization;
   }
 
@@ -113,6 +122,7 @@ class OrganizationsService {
       throw error;
     }
 
+    this.emit('updated', name, organization);
     return organization;
   }
 
@@ -132,6 +142,8 @@ class OrganizationsService {
       }
       throw error;
     }
+
+    this.emit('deleted', name);
   }
 
 }
