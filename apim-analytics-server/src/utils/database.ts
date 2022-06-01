@@ -1,6 +1,10 @@
 import * as mongodb from 'mongodb';
+import { Mutex } from 'async-mutex';
 import config from '../common/config';
 import { Logger as L } from '../common/logger';
+
+/** mutex for shared database client */
+const mutex = new Mutex();
 
 /**
  * Utility class for a MongoDB database.
@@ -22,20 +26,22 @@ export class MongoDatabase {
    */
   static async createInstance(name: string): Promise<mongodb.Db> {
 
-    if (MongoDatabase.#client === undefined) {
+    await mutex.runExclusive(async () => {
 
-      const client = new mongodb.MongoClient(config.database.url, {
-        appName: 'apim-analytics-server',
-        serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 10000,
-        socketTimeoutMS: 5000,
-        minPoolSize: 5,
-      });
+      if (MongoDatabase.#client === undefined) {
 
-      await client.connect();
-      MongoDatabase.#client = client;
-      L.info('MongoDatabase.createInstance', `Created database connection for '${config.database.url}'`);
-    }
+        const client = new mongodb.MongoClient(config.database.url, {
+          appName: 'apim-analytics-server',
+          minPoolSize: 4,
+          w: 'majority',
+        });
+
+        await client.connect();
+
+        MongoDatabase.#client = client;
+        L.info('MongoDatabase.createInstance', `Created database client for '${config.database.url}'`);
+      }
+    });
 
     return MongoDatabase.#client.db(name);
   }

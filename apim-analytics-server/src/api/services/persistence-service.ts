@@ -1,12 +1,14 @@
 import * as mongodb from 'mongodb';
+import { Mutex } from 'async-mutex';
 import { Constants } from '../../common/constants';
 import { Logger as L } from '../../common/logger';
 import { MongoDatabase } from '../../utils/database';
 import { ServerError } from '../middleware/error-handler';
 
-/**
- * A persistence service for document-based collections.
- */
+/** mutex for persistence service */
+const mutex = new Mutex();
+
+/** A persistence service for document-based collections. */
 export class PersistenceService<T> {
 
   /** A reference to a MongoDB collection. */
@@ -31,20 +33,25 @@ export class PersistenceService<T> {
     let database: mongodb.Db;
 
     try {
+
       database = await MongoDatabase.createInstance(Constants.SERVER_DATABASE_NAME);
-      const info = await database.listCollections({ name: name }).toArray();
-      if (info.length == 0) {
-        await database.createCollection(name);
-        L.info('PersistenceService.createInstance', `Created collection '${name}'`);
-        const indexName = `idx_text_${database.databaseName}_${name}`;
-        await database.collection(name).createIndex({ '$**': 'text' }, { name: indexName });
-        L.info('PersistenceService.createInstance', `Created full-text index '${indexName}'`);
-      }
+      await mutex.runExclusive(async () => {
+        const info = await database.listCollections({ name: name }).toArray();
+        if (info.length == 0) {
+          await database.createCollection(name);
+          L.info('PersistenceService.createInstance', `Created collection '${name}'`);
+          const indexName = `idx_text_${database.databaseName}_${name}`;
+          await database.collection(name).createIndex({ '$**': 'text' }, { name: indexName });
+          L.info('PersistenceService.createInstance', `Created full-text index '${indexName}'`);
+        }
+      });
+
     } catch (error: any) {
       L.error('PersistenceService.createInstance', error.message);
       throw PersistenceService.#createServerError(error);
     }
 
+    L.info('PersistenceService.createInstance', `Created service instance for collection '${name}'`);
     return new PersistenceService(database.collection(name));
   }
 
@@ -127,7 +134,7 @@ export class PersistenceService<T> {
   /**
    * Updates an existing document.
    * 
-   * @param id The document IDt.
+   * @param id The document ID.
    * @param document The part of the document that should be updated.
    * 
    * @returns The updated document.

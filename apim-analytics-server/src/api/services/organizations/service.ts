@@ -1,8 +1,12 @@
 import { TypedEmitter } from 'tiny-typed-emitter';
+import { Mutex } from 'async-mutex';
 import { ServerError } from '../../middleware/error-handler';
 import { PersistenceService } from '../persistence-service';
 import Organization = Components.Schemas.Organization;
 import OrganizationPatch = Components.Schemas.OrganizationPatch;
+
+/** mutex for shared persistence service instance */
+const mutex = new Mutex();
 
 /** The events emitted by the organization service. */
 interface Events {
@@ -25,9 +29,13 @@ class OrganizationsService extends TypedEmitter<Events> {
    * @returns The persistence service instance for organisations.
    */
   #getPersistenceService = async (): Promise<PersistenceService<Organization>> => {
-    if (this.#persistenceService === undefined) {
-      this.#persistenceService = await PersistenceService.createInstance('organizations');
-    }
+
+    await mutex.runExclusive(async () => {
+      if (this.#persistenceService === undefined) {
+        this.#persistenceService = await PersistenceService.createInstance('organizations');
+      }
+    });
+
     return this.#persistenceService;
   }
 
