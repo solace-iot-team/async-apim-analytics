@@ -1,14 +1,19 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import config from '../../common/config';
-import { Server } from '../../model/server';
-import { Team } from '../../model/team';
-import { Developer } from '../../model/developer';
-import { Application } from '../../model/application';
-import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
+import { Server } from '../../../model/server';
+import { Team } from '../../../model/team';
+import { Developer } from '../../../model/developer';
+import { Application } from '../../../model/application';
+import { createAuthorizationHeader, fetchData } from '../../../utils/fetch';
 
-const apiProductsToString = (apiProducts: any[]): string[] => {
+/**
+ * Extracts the names of API products.
+ * 
+ * @param apiProducts The API products.
+ * 
+ * @returns The API product names.
+ */
+const getApiProductNames = (apiProducts: any[]): string[] => {
 
-  let result: string[] = [];
+  const result: string[] = [];
   apiProducts.forEach(item => {
     if (typeof item === 'string') {
       result.push(item);
@@ -30,7 +35,7 @@ const apiProductsToString = (apiProducts: any[]): string[] => {
  * 
  * @return The list of team applications.
  */
-const getTeamApplications = async (server: Server, team: Team): Promise<Application[]> => {
+export const getTeamApplications = async (server: Server, team: Team): Promise<Application[]> => {
 
   const url = `${server.baseUrl}/${team.meta.organization}/teams/${team.name}/apps`;
   const response = await fetchData(url, createAuthorizationHeader(server));
@@ -42,7 +47,7 @@ const getTeamApplications = async (server: Server, team: Team): Promise<Applicat
   const applications: Application[] = response.map((application: any) => ({
     name: application.name,
     internalName: application.internalName,
-    apiProducts: apiProductsToString(application.apiProducts),
+    apiProducts: getApiProductNames(application.apiProducts),
     credentials: {
       username: application.credentials.secret.consumerKey,
     },
@@ -66,7 +71,7 @@ const getTeamApplications = async (server: Server, team: Team): Promise<Applicat
  * 
  * @return The list of developer applications.
  */
-const getDeveloperApplications = async (server: Server, developer: Developer): Promise<Application[]> => {
+export const getDeveloperApplications = async (server: Server, developer: Developer): Promise<Application[]> => {
 
   const url = `${server.baseUrl}/${developer.meta.organization}/developers/${developer.userName}/apps`
   const response = await fetchData(url, createAuthorizationHeader(server));
@@ -78,7 +83,7 @@ const getDeveloperApplications = async (server: Server, developer: Developer): P
   const applications: Application[] = response.map((application: any) => ({
     name: application.name,
     internalName: application.internalName,
-    apiProducts: apiProductsToString(application.apiProducts),
+    apiProducts: getApiProductNames(application.apiProducts),
     credentials: {
       username: application.credentials.secret.consumerKey,
     },
@@ -91,27 +96,3 @@ const getDeveloperApplications = async (server: Server, developer: Developer): P
 
   return applications;
 }
-
-(async (): Promise<void> => {
-
-  const applications: Application[] = [];
-
-  const server: Server = config.connectorServer;
-  if (!server) throw new Error('API Management Connector is not configured');
-
-  const teams: Team[] = workerData.teams || [];
-  for (const team of teams) {
-    const apps = await getTeamApplications(server, team);
-    applications.push(...apps);
-  }
-
-  const developers: Developer[] = workerData.developers || [];
-  for (const developer of developers) {
-    const apps = await getDeveloperApplications(server, developer);
-    applications.push(...apps);
-  }
-
-  parentPort?.postMessage(applications);
-  parentPort?.postMessage('done');
-
-})();

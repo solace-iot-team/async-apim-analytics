@@ -1,11 +1,9 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import config from '../../common/config';
-import { Server } from '../../model/server';
-import { Application } from '../../model/application';
-import { Environment } from '../../model/environment';
-import { Queue } from '../../model/queue';
-import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
-import { getSempV2MonitorEndpoint } from '../../utils/solace-cloud-api';
+import { Server } from '../../../model/server';
+import { Environment } from '../../../model/environment';
+import { Application } from '../../../model/application';
+import { Queue } from '../../../model/queue';
+import { createAuthorizationHeader, fetchData } from '../../../utils/fetch';
+import { getSempV2MonitorEndpoint } from '../../../utils/solace-cloud-api';
 
 /** The list of queue properties to retrieve from the server. */
 const queueProperties = [
@@ -54,7 +52,7 @@ const queueProperties = [
  * 
  * @returns The queues for guaranteed messaging.
  */
-const getQueues = async (server: Server, environment: Environment, applications: Application[]): Promise<Queue[]> => {
+export const getQueues = async (server: Server, environment: Environment, applications: Application[]): Promise<Queue[]> => {
 
   const queues: Queue[] = [];
 
@@ -119,27 +117,3 @@ const getQueues = async (server: Server, environment: Environment, applications:
 
   return queues;
 }
-
-(async () => {
-
-  const queues: Queue[] = [];
-
-  const server: Server = config.connectorServer;
-  if (!server) throw new Error('API Management Connector is not configured');
-
-  const environments: Environment[] = workerData.environments || [];
-  const applications: Application[] = workerData.applications || [];
-
-  for (const environment of environments) {
-    const organization = environment.meta.organization;
-    const apps = applications.filter(application => application.meta.organization == organization);
-    if (apps.length > 0) {
-      const _queues = await getQueues(server, environment, apps);
-      queues.push(..._queues);
-    }
-  }
-
-  parentPort?.postMessage(queues);
-  parentPort?.postMessage('done');
-
-})();

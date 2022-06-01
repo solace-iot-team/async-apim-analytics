@@ -1,11 +1,9 @@
-import { parentPort, workerData } from 'node:worker_threads';
-import config from '../../common/config';
-import { Server } from '../../model/server';
-import { Application } from '../../model/application';
-import { Environment } from '../../model/environment';
-import { RestDeliveryPoint } from '../../model/rest-delivery-point';
-import { createAuthorizationHeader, fetchData } from '../../utils/fetch';
-import { getSempV2MonitorEndpoint } from '../../utils/solace-cloud-api';
+import { Server } from '../../../model/server';
+import { Environment } from '../../../model/environment';
+import { Application } from '../../../model/application';
+import { RestDeliveryPoint } from '../../../model/rest-delivery-point';
+import { createAuthorizationHeader, fetchData } from '../../../utils/fetch';
+import { getSempV2MonitorEndpoint } from '../../../utils/solace-cloud-api';
 
 /** The list of RDP client properties to retrieve from the server. */
 const clientProperties = [
@@ -32,7 +30,7 @@ const clientProperties = [
  * 
  * @returns The rest delivery points.
  */
-const getRestDeliveryPoints = async (server: Server, environment: Environment, applications: Application[]): Promise<RestDeliveryPoint[]> => {
+export const getRestDeliveryPoints = async (server: Server, environment: Environment, applications: Application[]): Promise<RestDeliveryPoint[]> => {
 
   const restDeliveryPoints: RestDeliveryPoint[] = [];
 
@@ -85,29 +83,3 @@ const getRestDeliveryPoints = async (server: Server, environment: Environment, a
 
   return restDeliveryPoints;
 }
-
-// MAIN
-
-(async () => {
-
-  const restDeliveryPoints: RestDeliveryPoint[] = [];
-
-  const server: Server = config.connectorServer;
-  if (!server) throw new Error('API Management Connector is not configured');
-
-  const environments: Environment[] = workerData.environments || [];
-  const applications: Application[] = workerData.applications || [];
-
-  for (const environment of environments) {
-    const organization = environment.meta.organization;
-    const apps = applications.filter(application => application.meta.organization == organization);
-    if (apps.length > 0) {
-      const _rdps = await getRestDeliveryPoints(server, environment, apps);
-      restDeliveryPoints.push(..._rdps);
-    }
-  }
-
-  parentPort?.postMessage(restDeliveryPoints);
-  parentPort?.postMessage('done');
-
-})();
