@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uninstalling &mdash; Solace Async API Management Analytics r0.0.2 documentation</title>
+  <title>Simulating Workload &mdash; Solace Async API Management Analytics r0.0.2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/contentui.css" type="text/css" />
@@ -21,8 +21,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Stopping and Starting" href="stopping-and-starting.html" />
-    <link rel="prev" title="Installing" href="installing.html" /> 
+    <link rel="next" title="Reference" href="reference.html" />
+    <link rel="prev" title="Administering" href="administering.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,10 +45,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../quickstart.html">Quickstart</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="prerequisites.html">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installing.html">Installing</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Uninstalling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uninstalling.html">Uninstalling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stopping-and-starting.html">Stopping and Starting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="administering.html">Administering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulating-workload.html">Simulating Workload</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulating Workload</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulating-workload-using-the-workload-simulator">Simulating Workload Using the Workload Simulator</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html">Reference</a></li>
 </ul>
 </li>
@@ -69,9 +72,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../quickstart.html">Quickstart</a> &raquo;</li>
-      <li>Uninstalling</li>
+      <li>Simulating Workload</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/quickstart-content/uninstalling.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/quickstart-content/simulating-workload.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,31 +82,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="uninstalling">
-<span id="quickstart-content-uninstalling"></span><h1>Uninstalling<a class="headerlink" href="#uninstalling" title="Permalink to this heading"></a></h1>
+  <section id="simulating-workload">
+<span id="quickstart-content-simulating-workload"></span><h1>Simulating Workload<a class="headerlink" href="#simulating-workload" title="Permalink to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>In the following, the API Management Analytics home directory is referred to as <code class="docutils literal notranslate"><span class="pre">&lt;ANALYTICS_HOME&gt;</span></code>.</p>
 </div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>If you installed API Management Analytics using the <strong>all-in-one</strong> profile and if you created additional organizations in the
-API Management Connector, you must delete them first. Otherwise, you might end up with resources in your Solace Cloud service
-that must be deleted manually.</p>
-</div>
-<p>To remove all API Management Analytics components, do the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;ANALYTICS_HOME&gt;/quickstart
-./scripts/cleanup.sh
+<section id="simulating-workload-using-the-workload-simulator">
+<h2>Simulating Workload Using the Workload Simulator<a class="headerlink" href="#simulating-workload-using-the-workload-simulator" title="Permalink to this heading"></a></h2>
+<p>If you installed API Management Analytics with the <strong>all-in-one</strong> profile, you can simulate workload for
+the created application using the <strong>Workload Simulator</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;ANALYTICS_HOME&gt;/apim-analytics-tools
+<span class="nb">export</span> <span class="nv">DOTENV_CONFIG_PATH</span><span class="o">=</span>&lt;ANALYTICS_HOME&gt;/quickstart/.env
+npm run workload-simulator &lt;ANALYTICS_HOME&gt;/quickstart/resources/workload-simulator/organization1.json
 </pre></div>
 </div>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installing.html" class="btn btn-neutral float-left" title="Installing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="stopping-and-starting.html" class="btn btn-neutral float-right" title="Stopping and Starting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="administering.html" class="btn btn-neutral float-left" title="Administering" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

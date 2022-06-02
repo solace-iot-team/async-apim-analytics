@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/contentui.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -50,6 +51,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="uninstalling.html">Uninstalling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stopping-and-starting.html">Stopping and Starting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administering.html">Administering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulating-workload.html">Simulating Workload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference.html">Reference</a></li>
 </ul>
 </li>
@@ -81,13 +84,14 @@
            <div itemprop="articleBody">
              
   <section id="installing">
-<span id="quickstart-content-installing"></span><h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline"></a></h1>
+<span id="quickstart-content-installing"></span><h1>Installing<a class="headerlink" href="#installing" title="Permalink to this heading"></a></h1>
 <p>You can install API Management Analytics with one of the following profiles:</p>
 <dl class="field-list">
 <dt class="field-odd">standard</dt>
 <dd class="field-odd"><p>This installation profile creates a multi-container application with the following services:</p>
 <ul class="simple">
-<li><p>API Management Analytics server</p></li>
+<li><p>API Management Analytics</p></li>
+<li><p>MongoDB</p></li>
 <li><p>Prometheus</p></li>
 <li><p>Grafana</p></li>
 </ul>
@@ -96,9 +100,9 @@
 <dt class="field-even">all-in-one</dt>
 <dd class="field-even"><p>This installation profile creates a multi-container application with the following services:</p>
 <ul class="simple">
-<li><p>API Management Connector database</p></li>
-<li><p>API Management Connector server</p></li>
-<li><p>API Management Analytics server</p></li>
+<li><p>API Management Connector</p></li>
+<li><p>API Management Analytics</p></li>
+<li><p>MongoDB</p></li>
 <li><p>Prometheus</p></li>
 <li><p>Grafana</p></li>
 </ul>
@@ -117,10 +121,10 @@ Analytics to an existing API Management Connector.</p>
 <p>In the following, the API Management Analytics home directory is referred to as <code class="docutils literal notranslate"><span class="pre">&lt;ANALYTICS_HOME&gt;</span></code>.</p>
 </div>
 <section id="before-you-begin">
-<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Permalink to this headline"></a></h2>
+<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
-<li><p>Download the <a class="reference external" href="https://github.com/solace-iot-team/async-apim-analytics/releases/latest">latest release</a> of Solace Async API Management Analytics and extract the files to the <code class="docutils literal notranslate"><span class="pre">&lt;ANALYTICS_HOME&gt;</span></code> directory</p></li>
-<li><p>Install dependencies for the API Management Analytics tools</p>
+<li><p>Download the <a class="reference external" href="https://github.com/solace-iot-team/async-apim-analytics/releases/latest">latest release</a> of Solace Async API Management Analytics and extract the files to the <code class="docutils literal notranslate"><span class="pre">&lt;ANALYTICS_HOME&gt;</span></code> directory.</p></li>
+<li><p>Install dependencies for the API Management Analytics tools.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;ANALYTICS_HOME&gt;/apim-analytics-server
 npm ci
 </pre></div>
@@ -129,25 +133,37 @@ npm ci
 </ol>
 </section>
 <section id="installation-procedure">
-<h2>Installation Procedure<a class="headerlink" href="#installation-procedure" title="Permalink to this headline"></a></h2>
+<h2>Installation Procedure<a class="headerlink" href="#installation-procedure" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
-<li><p>Create the <strong>.env</strong> file</p>
+<li><p>Create the <strong>.env</strong> file using the provided template.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;ANALYTICS_HOME&gt;/quickstart
 cp template.env .env
 </pre></div>
 </div>
 </li>
-<li><p>In the created <strong>.env</strong> file:</p>
-<ul class="simple">
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">{solace-cloud-token}</span></code> with the API token for Solace’s Cloud REST API</p></li>
-<li><p>Replace <code class="docutils literal notranslate"><span class="pre">{solace-service-id}</span></code> with the ID of the Solace Cloud service you want to use</p></li>
-<li><p>Change the values of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_PASSWORD</span></code></p></li>
-<li><p>Change the values of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_PASSWORD</span></code></p></li>
-</ul>
-</li>
+<li><p>Update the <strong>.env</strong> file.</p>
+<ol class="loweralpha simple">
+<li><p>If you want to use the <strong>standard</strong> profile:</p></li>
 </ol>
-<ol class="arabic" start="3">
-<li><p>Create, start and bootstrap the API Management Analytics components</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Change the value of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_HOST</span></code> to the hostname of the API Management Connector server.</p></li>
+<li><p>Change the value of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_PORT</span></code> to the port of the API Management Connector server.</p></li>
+<li><p>Change the value of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_USERNAME</span></code> to the username of the API Management Connector server platform and ORG administrator.</p></li>
+<li><p>Change the value of <code class="docutils literal notranslate"><span class="pre">AMAX_SERVER_CONNECTOR_PASSWORD</span></code> to the password of the API Management Connector server platform and ORG administrator.</p></li>
+</ul>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p>If you want to use the <strong>all-in-one</strong> profile:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">{solace-cloud-token}</span></code> with the API token for Solace’s Cloud REST API.</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">{solace-service-id}</span></code> with the ID of the Solace Cloud service you want to use.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Create, start and bootstrap the API Management Analytics components.</p>
 <ul>
 <li><p>Using the <strong>standard</strong> profile:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> &lt;ANALYTICS_HOME&gt;/quickstart
@@ -179,7 +195,7 @@ cp template.env .env
 
   <div role="contentinfo">
     <p>&#169; Copyright 2022, Solace Corporation, Nils Eckert, &lt;nils.eckert@solace.com&gt;.
-      <span class="lastupdated">Last updated on 02 May 2022 at 10:27.
+      <span class="lastupdated">Last updated on 02 Jun 2022 at 14:21.
       </span></p>
   </div>
 
