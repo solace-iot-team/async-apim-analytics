@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Solace Async API Management Analytics Server
   description: Solace Async API Management Analytics Server API
-  version: 0.1.0
+  version: 0.2.0
 servers:
 - url: /v1
 
