@@ -1,6 +1,6 @@
 {
   "name": "@solace-iot-team/apim-analytics-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Async API Management Analytics Server",
   "scripts": {
     "gen:apitypes": "dtsgen -o src/@types/api/index.d.ts src/common/api.yml",
@@ -67,7 +67,7 @@
   "dependencies": {
     "@godaddy/terminus": "^4.10.2",
     "@ladjs/graceful": "^1.1.5",
-    "@solace-iot-team/apim-connector-openapi-node": "^0.7.6",
+    "@solace-iot-team/apim-connector-openapi-node": "^0.7.15",
     "async-mutex": "^0.3.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",

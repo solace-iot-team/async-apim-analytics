@@ -5,7 +5,7 @@ services:
       - mongodb-data:/data/db
     restart: unless-stopped
   apim-connector:
-    image: solaceiotteam/apim-connector-server:0.3.8
+    image: solaceiotteam/apim-connector-server:0.3.10
     ports:
       - ${AMAX_CONNECTOR_PORT:-8082}:3000
     healthcheck:
