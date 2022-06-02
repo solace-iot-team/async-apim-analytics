@@ -25,7 +25,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1653395962836,
+  "iteration": 1654154808470,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -34,6 +34,195 @@
         "type": "prometheus",
         "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
       },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 10,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(\n  max(max_over_time(\n    amax_client_uptime_seconds_total{organization=\"$organization\",application=~\"$applications\"}[$__range:1m]\n  )) by (application)\n) or vector(0)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "Active"
+        }
+      ],
+      "title": "Active Applications",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Active Applications"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 3
+      },
+      "id": 11,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(\n  max_over_time(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}[1y:$__interval])\n)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "Total"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(\n  max(max_over_time(\n    amax_client_uptime_seconds_total{organization=\"$organization\",application=~\"$applications\"}[$__range:1m]\n  )) by (application)\n)\nor vector(0)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "Active"
+        }
+      ],
+      "title": "Inactive Applications",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Inactive",
+            "binary": {
+              "left": "Value #Total",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Value #Active"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -67,7 +256,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 300
+                "value": 250
               }
             ]
           },
@@ -87,8 +276,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 12,
-        "x": 0,
+        "w": 10,
+        "x": 4,
         "y": 0
       },
       "id": 6,
@@ -112,14 +301,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_sent_total{organization=\"$organization\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application) * on(application) group_left(owner)\n  max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\n)",
+          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_sent_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application)\n)",
           "format": "table",
           "instant": true,
           "range": false,
-          "refId": "Top3 Producer"
+          "refId": "Top3 Messages Sent"
         }
       ],
-      "title": "Top 3: Producer Applications",
+      "title": "Top 3 Applications by Messages Sent",
       "transformations": [
         {
           "id": "organize",
@@ -199,7 +388,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 300
+                "value": 250
               }
             ]
           },
@@ -219,8 +408,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 12,
-        "x": 12,
+        "w": 10,
+        "x": 14,
         "y": 0
       },
       "id": 9,
@@ -244,14 +433,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_received_total{organization=\"$organization\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application) * on(application) group_left(owner)\n  max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\n)",
+          "expr": "topk(3,\n  sum(sum_over_time((rate(\n    amax_client_messages_received_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n  ) * 60)[$__range:1m])) by (application)\n)",
           "format": "table",
           "instant": true,
           "range": false,
-          "refId": "Top3 Consumer"
+          "refId": "Top3 Messages Received"
         }
       ],
-      "title": "Top 3: Consumer Applications",
+      "title": "Top 3 Applications by Messages Received",
       "transformations": [
         {
           "id": "organize",
@@ -301,11 +490,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "text",
+            "mode": "fixed"
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "displayMode": "color-text",
+            "filterable": false,
             "inspect": false
           },
           "mappings": [],
@@ -334,6 +525,10 @@
               {
                 "id": "unit",
                 "value": "short"
+              },
+              {
+                "id": "noValue",
+                "value": "0"
               }
             ]
           },
@@ -346,20 +541,74 @@
               {
                 "id": "unit",
                 "value": "decbytes"
+              },
+              {
+                "id": "noValue",
+                "value": "0 B"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Activity Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null+nan",
+                      "result": {
+                        "color": "orange",
+                        "index": 0,
+                        "text": "Not Active"
+                      }
+                    },
+                    "type": "special"
+                  },
+                  {
+                    "options": {
+                      "from": 0,
+                      "result": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Not Active"
+                      },
+                      "to": 0
+                    },
+                    "type": "range"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "green",
+                        "index": 2,
+                        "text": "Active"
+                      },
+                      "to": 9999999
+                    },
+                    "type": "range"
+                  }
+                ]
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 24,
         "x": 0,
         "y": 6
       },
       "id": 4,
+      "interval": "1m",
       "options": {
         "footer": {
+          "enablePagination": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -383,7 +632,21 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "expr": "max(max_over_time(\n  amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}[$__range:1m]\n)) by (application)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Applications"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n) * 60)[$__range:1m])) by (application)\nor vector(0)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -397,7 +660,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n) * 60)[$__range:1m])) by (application)\nor vector(0)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -411,7 +674,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_discarded_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_discarded_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n) * 60)[$__range:1m])) by (application)\nor vector(0)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -425,7 +688,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_bytes_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_sent_bytes_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n) * 60)[$__range:1m])) by (application)\nor vector(0)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -439,15 +702,29 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_bytes_total{organization=\"$organization\"}[1m:1m]\n) * 60)[$__range:1m])) by (application) * on(application) group_left()\nmax(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application)\nor max(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}) by (application) * 0",
+          "expr": "sum(sum_over_time((rate(\n  amax_client_messages_received_bytes_total{organization=\"$organization\",application=~\"$applications\"}[1m:1m]\n) * 60)[$__range:1m])) by (application)\nor vector(0)",
           "format": "table",
           "hide": false,
           "instant": true,
           "range": false,
           "refId": "Data Received"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "present_over_time((count(\n    amax_client_uptime_seconds_total{organization=\"$organization\",application=~\"$applications\"}\n) by (application))[$__range:1m])\nor vector(0)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "Activity"
         }
       ],
-      "title": "Applications",
+      "title": "Application Details",
       "transformations": [
         {
           "id": "merge",
@@ -457,19 +734,24 @@
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time": true
+              "Time": true,
+              "Value #Applications": true
             },
             "indexByName": {
               "Time": 0,
-              "Value #Data Received": 6,
-              "Value #Data Sent": 5,
-              "Value #Messages Discarded": 4,
-              "Value #Messages Received": 3,
-              "Value #Messages Sent": 2,
+              "Value #Activity": 8,
+              "Value #Applications": 2,
+              "Value #Data Received": 7,
+              "Value #Data Sent": 6,
+              "Value #Messages Discarded": 5,
+              "Value #Messages Received": 4,
+              "Value #Messages Sent": 3,
               "application": 1
             },
             "renameByName": {
               "Time": "",
+              "Value #Activity": "Activity Status",
+              "Value #Applications": "",
               "Value #Data Received": "Data Received",
               "Value #Data Sent": "Data Sent",
               "Value #Messages Discarded": "Messages Discarded",
@@ -477,6 +759,24 @@
               "Value #Messages Sent": "Messages Sent",
               "application": "Application"
             }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": ".+"
+                  }
+                },
+                "fieldName": "Application"
+              }
+            ],
+            "match": "all",
+            "type": "include"
           }
         }
       ],
@@ -575,6 +875,32 @@
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "4cca79df-ac86-402b-9603-13e0f249eb50"
+        },
+        "definition": "label_values(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}, application)",
+        "hide": 2,
+        "includeAll": true,
+        "multi": true,
+        "name": "applications",
+        "options": [],
+        "query": {
+          "query": "label_values(amax_application_info{organization=\"$organization\",type=~\"$type\",owner=~\"$owner\"}, application)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -586,6 +912,6 @@
   "timezone": "",
   "title": "AsyncAPI Analytics: Team & Developer Statistics",
   "uid": "ebd0cb4c-ad21-4a2c-8a5e-d08e85b9135a",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
